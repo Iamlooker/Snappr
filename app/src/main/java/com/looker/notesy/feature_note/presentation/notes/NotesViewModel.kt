@@ -1,7 +1,5 @@
 package com.looker.notesy.feature_note.presentation.notes
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.notesy.feature_note.domain.model.Note
@@ -10,6 +8,8 @@ import com.looker.notesy.feature_note.domain.utils.NoteOrder
 import com.looker.notesy.feature_note.domain.utils.OrderType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -17,12 +17,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotesViewModel
-	@Inject constructor(
+@Inject constructor(
 	private val noteUseCases: NoteUseCases
 ) : ViewModel() {
 
-	private val _state = mutableStateOf(NotesState())
-	val state: State<NotesState> = _state
+	private val _state = MutableStateFlow(NotesState())
+	val state = _state.asStateFlow()
 
 	private var recentlyDeletedNote: Note? = null
 	private var getNotesJob: Job? = null
@@ -50,19 +50,22 @@ class NotesViewModel
 				}
 			}
 			NotesEvent.ToggleOrderSection -> {
-				_state.value =
-					state.value.copy(isOrderSectionVisible = !state.value.isOrderSectionVisible)
+				viewModelScope.launch {
+					_state.emit(state.value.copy(isOrderSectionVisible = !state.value.isOrderSectionVisible))
+				}
 			}
 		}
 	}
 
-	fun getNotes(noteOrder: NoteOrder) {
+	private fun getNotes(noteOrder: NoteOrder) {
 		getNotesJob?.cancel()
 		getNotesJob = noteUseCases.getNotes(noteOrder)
 			.onEach { notes ->
-				_state.value = state.value.copy(
-					notesList = notes,
-					noteOrder = noteOrder
+				_state.emit(
+					state.value.copy(
+						notesList = notes,
+						noteOrder = noteOrder
+					)
 				)
 			}.launchIn(viewModelScope)
 	}

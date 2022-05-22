@@ -34,7 +34,11 @@ fun NoteItem(
 			horizontalAlignment = Alignment.Start,
 			verticalArrangement = Arrangement.Center
 		) {
-			Text(text = note.title, style = MaterialTheme.typography.titleMedium, maxLines = 1)
+			Text(
+				text = note.title,
+				style = MaterialTheme.typography.titleLarge,
+				maxLines = 1
+			)
 			Text(
 				text = note.content,
 				style = MaterialTheme.typography.bodyMedium,
@@ -52,7 +56,7 @@ fun NotePrev() {
 		NoteItem(
 			note = Note(
 				"Title",
-				content = "This is test note, please check it out",
+				content = "This is test note, please check it out. ".repeat(10),
 				timeCreated = 0L,
 				color = RedPink.toArgb()
 			)
