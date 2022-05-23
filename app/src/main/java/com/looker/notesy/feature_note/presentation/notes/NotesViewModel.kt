@@ -2,16 +2,15 @@ package com.looker.notesy.feature_note.presentation.notes
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.looker.notesy.core.UiEvents
 import com.looker.notesy.feature_note.domain.model.Note
 import com.looker.notesy.feature_note.domain.use_case.NoteUseCases
 import com.looker.notesy.feature_note.domain.utils.NoteOrder
 import com.looker.notesy.feature_note.domain.utils.OrderType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,6 +22,9 @@ class NotesViewModel
 
 	private val _state = MutableStateFlow(NotesState())
 	val state = _state.asStateFlow()
+
+	private val _eventFlow = MutableSharedFlow<UiEvents>()
+	val eventFlow = _eventFlow.asSharedFlow()
 
 	private var recentlyDeletedNote: Note? = null
 	private var getNotesJob: Job? = null
@@ -37,6 +39,11 @@ class NotesViewModel
 				viewModelScope.launch {
 					noteUseCases.deleteNote(event.note)
 					recentlyDeletedNote = event.note
+					_eventFlow.emit(UiEvents.ShowSnackBar("Restore Note?", true))
+					launch {
+						delay(2000)
+						_eventFlow.emit(UiEvents.ShowSnackBar(show = false))
+					}
 				}
 			}
 			is NotesEvent.Order -> {
@@ -47,6 +54,7 @@ class NotesViewModel
 				viewModelScope.launch {
 					noteUseCases.addNote(recentlyDeletedNote ?: return@launch)
 					recentlyDeletedNote = null
+					_eventFlow.emit(UiEvents.ShowSnackBar(show = false))
 				}
 			}
 			NotesEvent.ToggleOrderSection -> {
