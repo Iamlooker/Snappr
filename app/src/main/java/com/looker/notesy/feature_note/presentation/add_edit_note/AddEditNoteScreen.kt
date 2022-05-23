@@ -1,17 +1,12 @@
 package com.looker.notesy.feature_note.presentation.add_edit_note
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.looker.notesy.core.UiEvents
@@ -27,13 +22,16 @@ fun AddEditNoteScreen(
 	val title by viewModel.noteTitle.collectAsState()
 	val content by viewModel.noteContent.collectAsState()
 
+	var snackBarState: UiEvents.ShowSnackBar by remember { mutableStateOf(UiEvents.ShowSnackBar()) }
 	LaunchedEffect(true) {
 		viewModel.eventFlow.collectLatest {
 			when (it) {
+				is UiEvents.ShowSnackBar -> {
+					snackBarState = it
+				}
 				UiEvents.SaveNote -> {
 					navController.navigateUp()
 				}
-				is UiEvents.ShowSnackBar -> {}
 			}
 		}
 	}
@@ -41,17 +39,32 @@ fun AddEditNoteScreen(
 	Scaffold(
 		modifier = Modifier
 			.fillMaxSize()
+			.statusBarsPadding()
 			.imePadding(),
 		floatingActionButton = {
 			FloatingActionButton(onClick = { viewModel.onEvent(AddEditNoteEvent.SaveNote) }) {
 				Icon(imageVector = Icons.Rounded.Done, contentDescription = null)
 			}
+		},
+		snackbarHost = {
+			if (snackBarState.show) {
+				Snackbar(
+					containerColor = MaterialTheme.colorScheme.inverseSurface,
+					contentColor = MaterialTheme.colorScheme.inverseOnSurface
+				) {
+					Text(text = snackBarState.message)
+				}
+			}
 		}
 	) { paddingValues ->
 		Column(
-			modifier = Modifier.padding(paddingValues)
+			modifier = Modifier.padding(
+				top = paddingValues.calculateTopPadding() + 32.dp,
+				bottom = paddingValues.calculateBottomPadding()
+			)
 		) {
 			TransparentTextField(
+				modifier = Modifier.fillMaxWidth(),
 				text = title.text,
 				hint = title.hint,
 				singleLine = true,
@@ -66,5 +79,4 @@ fun AddEditNoteScreen(
 			)
 		}
 	}
-
 }

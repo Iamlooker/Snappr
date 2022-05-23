@@ -7,6 +7,7 @@ import com.looker.notesy.feature_note.domain.model.Note
 import com.looker.notesy.feature_note.domain.use_case.NoteUseCases
 import com.looker.notesy.feature_note.domain.utils.NoteOrder
 import com.looker.notesy.feature_note.domain.utils.OrderType
+import com.looker.notesy.feature_note.presentation.utils.Utils.SNACKBAR_DURATION_LONG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -28,6 +29,7 @@ class NotesViewModel
 
 	private var recentlyDeletedNote: Note? = null
 	private var getNotesJob: Job? = null
+	private var snackBarJob: Job? = null
 
 	init {
 		getNotes(NoteOrder.Date(OrderType.Descending))
@@ -37,11 +39,12 @@ class NotesViewModel
 		when (event) {
 			is NotesEvent.Delete -> {
 				viewModelScope.launch {
+					snackBarJob?.cancel()
 					noteUseCases.deleteNote(event.note)
 					recentlyDeletedNote = event.note
 					_eventFlow.emit(UiEvents.ShowSnackBar("Restore Note?", true))
-					launch {
-						delay(2000)
+					snackBarJob = launch {
+						delay(SNACKBAR_DURATION_LONG)
 						_eventFlow.emit(UiEvents.ShowSnackBar(show = false))
 					}
 				}
@@ -52,6 +55,7 @@ class NotesViewModel
 			}
 			NotesEvent.Restore -> {
 				viewModelScope.launch {
+					snackBarJob?.cancel()
 					noteUseCases.addNote(recentlyDeletedNote ?: return@launch)
 					recentlyDeletedNote = null
 					_eventFlow.emit(UiEvents.ShowSnackBar(show = false))

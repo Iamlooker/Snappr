@@ -75,17 +75,21 @@ fun NoteItem(
 					horizontalAlignment = Alignment.Start,
 					verticalArrangement = Arrangement.Center
 				) {
-					Text(
-						text = note.title,
-						style = MaterialTheme.typography.titleLarge,
-						maxLines = 1
-					)
-					Text(
-						text = note.content,
-						style = MaterialTheme.typography.bodyMedium,
-						maxLines = 8,
-						overflow = TextOverflow.Ellipsis
-					)
+					if (note.title.isNotBlank()) {
+						Text(
+							text = note.title,
+							style = MaterialTheme.typography.titleLarge,
+							maxLines = 1
+						)
+					}
+					if (note.title.isNotBlank()) {
+						Text(
+							text = note.content,
+							style = MaterialTheme.typography.bodyMedium,
+							maxLines = 8,
+							overflow = TextOverflow.Ellipsis
+						)
+					}
 				}
 			}
 		}

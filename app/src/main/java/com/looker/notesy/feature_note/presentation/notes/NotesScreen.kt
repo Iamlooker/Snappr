@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,13 +33,21 @@ fun NotesScreen(
 	val state by viewModel.state.collectAsState()
 	val scrollBehavior = remember { pinnedScrollBehavior() }
 	val snackBarState by viewModel.eventFlow.collectAsState(UiEvents.ShowSnackBar())
+	val customStatusPadding = WindowInsets.statusBars.asPaddingValues()
 	Scaffold(
 		modifier = Modifier
 			.fillMaxSize()
 			.nestedScroll(scrollBehavior.nestedScrollConnection),
 		topBar = {
-			SmallTopAppBar(
-				title = { Text(text = stringResource(id = R.string.app_name)) },
+			CenterAlignedTopAppBar(
+				modifier = Modifier.height(customStatusPadding.calculateTopPadding() + 64.dp),
+				title = {
+					Text(
+						modifier = Modifier.statusBarsPadding(),
+						text = stringResource(id = R.string.app_name),
+						style = MaterialTheme.typography.headlineMedium
+					)
+				},
 				scrollBehavior = scrollBehavior
 			)
 		},
@@ -54,10 +61,9 @@ fun NotesScreen(
 				Snackbar(
 					containerColor = MaterialTheme.colorScheme.inverseSurface,
 					contentColor = MaterialTheme.colorScheme.inverseOnSurface,
-					actionContentColor = MaterialTheme.colorScheme.primary,
 					action = {
 						TextButton(onClick = { viewModel.onEvent(NotesEvent.Restore) }) {
-							Text(text = "Restore")
+							Text(text = "Restore", color = MaterialTheme.colorScheme.inversePrimary)
 						}
 					}
 				) {
@@ -67,7 +73,11 @@ fun NotesScreen(
 		}
 	) {
 		LazyColumn(
-			contentPadding = it,
+			contentPadding = PaddingValues(
+				top = it.calculateTopPadding(),
+				bottom = it.calculateBottomPadding() + WindowInsets.navigationBars.asPaddingValues()
+					.calculateBottomPadding()
+			),
 			verticalArrangement = Arrangement.spacedBy(12.dp)
 		) {
 			item {
