@@ -10,9 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,6 +27,7 @@ fun NotesScreen(
 	viewModel: NotesViewModel = viewModel()
 ) {
 	val state by viewModel.state.collectAsState()
+	var showDialog by remember { mutableStateOf(false) }
 	Scaffold(
 		modifier = Modifier.fillMaxSize(),
 		topBar = {
@@ -51,11 +50,13 @@ fun NotesScreen(
 			}
 			items(items = state.notesList, key = { note -> note.id ?: 0 }) { note ->
 				NoteItem(
-					note,
+					note = note,
 					modifier = Modifier
 						.padding(horizontal = 16.dp)
 						.animateItemPlacement()
-						.clickable { })
+				) {
+					viewModel.onEvent(NotesEvent.Delete(note))
+				}
 			}
 		}
 	}
