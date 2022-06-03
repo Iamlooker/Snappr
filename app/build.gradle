@@ -50,7 +50,7 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.activity:activity-compose:1.4.0'
 
     // Compose Runtime
@@ -67,8 +67,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-compose:2.4.2'
 
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2'
 
     // Hilt
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'

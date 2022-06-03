@@ -20,7 +20,6 @@ import com.looker.notesy.core.SwipeToDismiss
 import com.looker.notesy.core.rememberDismissState
 import com.looker.notesy.feature_note.domain.model.Note
 import com.looker.notesy.ui.theme.NotesyTheme
-import com.looker.notesy.ui.theme.RedPink
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -105,7 +104,7 @@ fun NotePrev() {
 				"Title",
 				content = "This is test note, please check it out. ".repeat(10),
 				timeCreated = 0L,
-				color = RedPink.toArgb()
+				color = MaterialTheme.colorScheme.tertiary.toArgb()
 			)
 		)
 	}

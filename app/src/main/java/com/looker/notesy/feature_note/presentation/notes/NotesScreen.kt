@@ -33,14 +33,15 @@ fun NotesScreen(
 	val state by viewModel.state.collectAsState()
 	val scrollBehavior = remember { pinnedScrollBehavior() }
 	val snackBarState by viewModel.eventFlow.collectAsState(UiEvents.ShowSnackBar())
-	val customStatusPadding = WindowInsets.statusBars.asPaddingValues()
 	Scaffold(
 		modifier = Modifier
 			.fillMaxSize()
 			.nestedScroll(scrollBehavior.nestedScrollConnection),
 		topBar = {
 			CenterAlignedTopAppBar(
-				modifier = Modifier.height(customStatusPadding.calculateTopPadding() + 64.dp),
+				modifier = Modifier.windowInsetsTopHeight(
+					WindowInsets.statusBars.add(WindowInsets(top = 64.dp))
+				),
 				title = {
 					Text(
 						modifier = Modifier.statusBarsPadding(),
@@ -52,7 +53,11 @@ fun NotesScreen(
 			)
 		},
 		floatingActionButton = {
-			FloatingActionButton(onClick = { navController.navigate(Screen.AddEditNoteScreen.route) }) {
+			FloatingActionButton(
+				modifier = Modifier.navigationBarsPadding(),
+				onClick = { navController.navigate(Screen.AddEditNoteScreen.route) },
+				containerColor = MaterialTheme.colorScheme.secondaryContainer
+			) {
 				Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
 			}
 		},
@@ -75,8 +80,8 @@ fun NotesScreen(
 		LazyColumn(
 			contentPadding = PaddingValues(
 				top = it.calculateTopPadding(),
-				bottom = it.calculateBottomPadding() + WindowInsets.navigationBars.asPaddingValues()
-					.calculateBottomPadding()
+				bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+						+ 12.dp
 			),
 			verticalArrangement = Arrangement.spacedBy(12.dp)
 		) {

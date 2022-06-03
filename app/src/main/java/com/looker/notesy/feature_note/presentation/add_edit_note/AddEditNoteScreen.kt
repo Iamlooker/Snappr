@@ -40,6 +40,7 @@ fun AddEditNoteScreen(
 		modifier = Modifier
 			.fillMaxSize()
 			.statusBarsPadding()
+			.navigationBarsPadding()
 			.imePadding(),
 		floatingActionButton = {
 			FloatingActionButton(onClick = { viewModel.onEvent(AddEditNoteEvent.SaveNote) }) {
