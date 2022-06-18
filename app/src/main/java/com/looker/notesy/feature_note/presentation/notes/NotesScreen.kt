@@ -31,7 +31,8 @@ fun NotesScreen(
 	viewModel: NotesViewModel = hiltViewModel()
 ) {
 	val state by viewModel.state.collectAsState()
-	val scrollBehavior = remember { pinnedScrollBehavior() }
+	val topAppBarScrollBehavior = rememberTopAppBarScrollState()
+	val scrollBehavior = remember { pinnedScrollBehavior(topAppBarScrollBehavior) }
 	val snackBarState by viewModel.eventFlow.collectAsState(UiEvents.ShowSnackBar())
 	Scaffold(
 		modifier = Modifier
@@ -55,8 +56,7 @@ fun NotesScreen(
 		floatingActionButton = {
 			FloatingActionButton(
 				modifier = Modifier.navigationBarsPadding(),
-				onClick = { navController.navigate(Screen.AddEditNoteScreen.route) },
-				containerColor = MaterialTheme.colorScheme.secondaryContainer
+				onClick = { navController.navigate(Screen.AddEditNoteScreen.route) }
 			) {
 				Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
 			}

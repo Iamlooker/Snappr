@@ -15,11 +15,12 @@ fun TransparentTextField(
 	modifier: Modifier = Modifier,
 	onValueChange: (String) -> Unit,
 	singleLine: Boolean = false,
+	containerColor: Color = MaterialTheme.colorScheme.surface,
 	contentColor: Color = MaterialTheme.colorScheme.onBackground,
 	textStyle: TextStyle = LocalTextStyle.current
 ) {
 	val textFieldColor = TextFieldDefaults.textFieldColors(
-		containerColor = Color.Transparent,
+		containerColor = containerColor,
 		textColor = contentColor,
 		focusedIndicatorColor = Color.Transparent,
 		unfocusedIndicatorColor = Color.Transparent

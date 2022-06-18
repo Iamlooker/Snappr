@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavType
@@ -25,33 +26,38 @@ class MainActivity : ComponentActivity() {
 		super.onCreate(savedInstanceState)
 		setContent {
 			NotesyTheme {
-				Surface(
-					modifier = Modifier.fillMaxSize(),
-					color = MaterialTheme.colorScheme.background
-				) {
-					val navController = rememberNavController()
-					NavHost(
-						navController = navController,
-						startDestination = Screen.NotesScreen.route
-					) {
-						composable(route = Screen.NotesScreen.route) {
-							NotesScreen(navController = navController)
-						}
-						composable(
-							route = Screen.AddEditNoteScreen.route + "?noteId={noteId}",
-							arguments = listOf(
-								navArgument(name = "noteId") {
-									type = NavType.IntType
-									defaultValue = -1
-								}
-							)
-						) {
-							AddEditNoteScreen(navController = navController)
-						}
-					}
-				}
+				Notesy()
 			}
 		}
 		WindowCompat.setDecorFitsSystemWindows(window, false)
+	}
+}
+
+@Composable
+fun Notesy() {
+	Surface(
+		modifier = Modifier.fillMaxSize(),
+		color = MaterialTheme.colorScheme.background
+	) {
+		val navController = rememberNavController()
+		NavHost(
+			navController = navController,
+			startDestination = Screen.NotesScreen.route
+		) {
+			composable(route = Screen.NotesScreen.route) {
+				NotesScreen(navController = navController)
+			}
+			composable(
+				route = Screen.AddEditNoteScreen.route + "?noteId={noteId}",
+				arguments = listOf(
+					navArgument(name = "noteId") {
+						type = NavType.IntType
+						defaultValue = -1
+					}
+				)
+			) {
+				AddEditNoteScreen(navController = navController)
+			}
+		}
 	}
 }
