@@ -11,7 +11,12 @@ import com.looker.notesy.feature_note.presentation.utils.Utils.SNACKBAR_DURATION
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,6 +35,7 @@ class NotesViewModel
 	private var recentlyDeletedNote: Note? = null
 	private var getNotesJob: Job? = null
 	private var snackBarJob: Job? = null
+	private var deleteConfirmationJob: Job? = null
 
 	init {
 		getNotes(NoteOrder.Date(OrderType.Descending))
@@ -52,6 +58,22 @@ class NotesViewModel
 			is NotesEvent.Order -> {
 				if (state.value.noteOrder::class == event.noteOrder::class && state.value.noteOrder.orderType == event.noteOrder.orderType) return
 				getNotes(event.noteOrder)
+			}
+			NotesEvent.DeleteConfirmation -> {
+				viewModelScope.launch {
+					deleteConfirmationJob?.cancel()
+					deleteConfirmationJob = launch {
+						_eventFlow.emit(UiEvents.DeleteConfirmation(true))
+					}
+				}
+			}
+			NotesEvent.RemoveDeleteConfirmation -> {
+				viewModelScope.launch {
+					deleteConfirmationJob?.cancel()
+					deleteConfirmationJob = launch {
+						_eventFlow.emit(UiEvents.DeleteConfirmation(false))
+					}
+				}
 			}
 			NotesEvent.Restore -> {
 				viewModelScope.launch {

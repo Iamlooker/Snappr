@@ -10,10 +10,8 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
@@ -47,7 +45,10 @@ fun NotesyTheme(
 		SideEffect {
 //			(view.context as Activity).window.statusBarColor = colorScheme.background.toArgb()
 //			(view.context as Activity).window.navigationBarColor = colorScheme.background.toArgb()
-			WindowCompat.getInsetsController((view.context as Activity).window, view).isAppearanceLightStatusBars = !darkTheme
+			WindowCompat.getInsetsController(
+				(view.context as Activity).window,
+				view
+			).isAppearanceLightStatusBars = !darkTheme
 		}
 	}
 

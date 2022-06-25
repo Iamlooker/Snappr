@@ -43,5 +43,4 @@ fun DeleteDialog(
 			Text(text = "Are you sure, you want to delete this note?")
 		}
 	)
-
 }
