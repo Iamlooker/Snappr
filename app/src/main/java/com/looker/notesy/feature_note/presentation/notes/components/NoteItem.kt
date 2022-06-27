@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -51,10 +52,8 @@ fun NoteItem(
 		if (restore) state.reset()
 	}
 
-	Surface(
+	ElevatedCard(
 		modifier = modifier.fillMaxWidth(),
-		color = MaterialTheme.colorScheme.surfaceVariant,
-		tonalElevation = 8.dp,
 		shape = MaterialTheme.shapes.extraLarge,
 		onClick = onNoteClick
 	) {

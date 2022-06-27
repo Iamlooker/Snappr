@@ -29,7 +29,7 @@ fun OrderChips(
 	Row(
 		modifier = modifier
 			.horizontalScroll(state = rememberScrollState())
-			.padding(horizontal = 4.dp),
+			.padding(horizontal = 8.dp),
 		horizontalArrangement = Arrangement.spacedBy(4.dp),
 		verticalAlignment = Alignment.CenterVertically
 	) {
@@ -82,7 +82,7 @@ fun OrderChip(
 	icon: (@Composable () -> Unit)? = null,
 	onClick: () -> Unit
 ) {
-	FilterChip(
+	ElevatedFilterChip(
 		modifier = modifier,
 		selected = isSelected,
 		onClick = onClick,
