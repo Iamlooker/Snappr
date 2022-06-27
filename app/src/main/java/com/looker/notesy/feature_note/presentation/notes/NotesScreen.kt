@@ -19,16 +19,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults.pinnedScrollBehavior
 import androidx.compose.material3.rememberTopAppBarScrollState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -54,7 +57,16 @@ fun NotesScreen(
 	val state by viewModel.state.collectAsState()
 	val topAppBarScrollBehavior = rememberTopAppBarScrollState()
 	val scrollBehavior = remember { pinnedScrollBehavior(topAppBarScrollBehavior) }
-	val eventFlow by viewModel.eventFlow.collectAsState(UiEvents.ShowSnackBar())
+	val eventFlow by viewModel.eventFlow.collectAsState(UiEvents.EMPTY)
+	val snackbarHost = remember { SnackbarHostState() }
+	LaunchedEffect(eventFlow) {
+		if (eventFlow is UiEvents.ShowSnackBar) {
+			snackbarHost.showSnackbar(
+				message = (eventFlow as UiEvents.ShowSnackBar).message,
+				actionLabel = "Restore"
+			)
+		}
+	}
 	Scaffold(
 		modifier = Modifier
 			.fillMaxSize()
@@ -83,17 +95,16 @@ fun NotesScreen(
 			}
 		},
 		snackbarHost = {
-			if (eventFlow is UiEvents.ShowSnackBar && (eventFlow as UiEvents.ShowSnackBar).show) {
+			SnackbarHost(hostState = snackbarHost) { data ->
 				Snackbar(
-					containerColor = MaterialTheme.colorScheme.inverseSurface,
-					contentColor = MaterialTheme.colorScheme.inverseOnSurface,
+					modifier = Modifier.padding(16.dp),
 					action = {
-						TextButton(onClick = { viewModel.onEvent(NotesEvent.Restore) }) {
-							Text(text = "Restore", color = MaterialTheme.colorScheme.inversePrimary)
+						FilledTonalButton(onClick = { viewModel.onEvent(NotesEvent.Restore) }) {
+							Text(text = "Restore")
 						}
 					}
 				) {
-					Text(text = (eventFlow as UiEvents.ShowSnackBar).message)
+					Text(text = data.visuals.message)
 				}
 			}
 		}
@@ -122,20 +133,19 @@ fun NotesScreen(
 							route = Screen.AddEditNoteScreen.route + "?noteId=${note.id}"
 						)
 					},
-					restore = when(eventFlow) {
-						is UiEvents.DeleteConfirmation -> !(eventFlow as UiEvents.DeleteConfirmation).show
-						is UiEvents.ShowSnackBar -> !(eventFlow as UiEvents.ShowSnackBar).show
-						UiEvents.SaveNote -> false
-					},
-					onDismiss = { viewModel.onEvent(NotesEvent.DeleteConfirmation) }
+					restore = if (eventFlow is UiEvents.Restored) true
+					else eventFlow is UiEvents.Restored && (eventFlow as UiEvents.Restored).note != note,
+					onDismiss = { viewModel.onEvent(NotesEvent.DeleteConfirmation(note)) }
 				)
-				if (eventFlow is UiEvents.DeleteConfirmation && (eventFlow as UiEvents.DeleteConfirmation).show) {
-					DeleteDialog(
-						note = note,
-						onConfirm = { viewModel.onEvent(NotesEvent.Delete(note)) },
-						onDismiss = { viewModel.onEvent(NotesEvent.RemoveDeleteConfirmation) }
-					)
-				}
+			}
+		}
+		if (eventFlow is UiEvents.DeleteConfirmation && (eventFlow as UiEvents.DeleteConfirmation).show) {
+			(eventFlow as UiEvents.DeleteConfirmation).note?.let { note ->
+				DeleteDialog(
+					note = note,
+					onConfirm = { viewModel.onEvent(NotesEvent.Delete(note)) },
+					onDismiss = { viewModel.onEvent(NotesEvent.RemoveDeleteConfirmation) }
+				)
 			}
 		}
 	}

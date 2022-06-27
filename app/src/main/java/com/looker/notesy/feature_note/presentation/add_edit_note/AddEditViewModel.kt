@@ -7,10 +7,7 @@ import com.looker.notesy.core.UiEvents
 import com.looker.notesy.feature_note.domain.model.InvalidNoteException
 import com.looker.notesy.feature_note.domain.model.Note
 import com.looker.notesy.feature_note.domain.use_case.NoteUseCases
-import com.looker.notesy.feature_note.presentation.utils.Utils.SNACKBAR_DURATION_SHORT
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -34,7 +31,6 @@ class AddEditViewModel
 	val eventFlow = _eventFlow.asSharedFlow()
 
 	private var currentNoteId: Int? = null
-	private var snackBarJob: Job? = null
 
 	init {
 		savedStateHandle.get<Int>("noteId")?.let { noteId ->
@@ -59,7 +55,6 @@ class AddEditViewModel
 				_noteContent.value = noteContent.value.copy(text = event.value)
 			}
 			AddEditNoteEvent.SaveNote -> {
-				snackBarJob?.cancel()
 				viewModelScope.launch {
 					try {
 						noteUseCases.addNote(
@@ -72,18 +67,10 @@ class AddEditViewModel
 							)
 						)
 						_eventFlow.emit(UiEvents.SaveNote)
-						_eventFlow.emit(UiEvents.ShowSnackBar(show = false))
 					} catch (e: InvalidNoteException) {
 						_eventFlow.emit(
-							UiEvents.ShowSnackBar(
-								message = e.message ?: "Note not saved",
-								show = true
-							)
+							UiEvents.ShowSnackBar(message = e.message ?: "Note not saved")
 						)
-						snackBarJob = launch {
-							delay(SNACKBAR_DURATION_SHORT)
-							_eventFlow.emit(UiEvents.ShowSnackBar(show = false))
-						}
 					}
 				}
 			}

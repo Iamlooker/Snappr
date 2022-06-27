@@ -7,10 +7,8 @@ import com.looker.notesy.feature_note.domain.model.Note
 import com.looker.notesy.feature_note.domain.use_case.NoteUseCases
 import com.looker.notesy.feature_note.domain.utils.NoteOrder
 import com.looker.notesy.feature_note.domain.utils.OrderType
-import com.looker.notesy.feature_note.presentation.utils.Utils.SNACKBAR_DURATION_LONG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -34,7 +32,6 @@ class NotesViewModel
 
 	private var recentlyDeletedNote: Note? = null
 	private var getNotesJob: Job? = null
-	private var snackBarJob: Job? = null
 	private var deleteConfirmationJob: Job? = null
 
 	init {
@@ -45,25 +42,20 @@ class NotesViewModel
 		when (event) {
 			is NotesEvent.Delete -> {
 				viewModelScope.launch {
-					snackBarJob?.cancel()
 					noteUseCases.deleteNote(event.note)
 					recentlyDeletedNote = event.note
-					_eventFlow.emit(UiEvents.ShowSnackBar("Restore Note?", true))
-					snackBarJob = launch {
-						delay(SNACKBAR_DURATION_LONG)
-						_eventFlow.emit(UiEvents.ShowSnackBar(show = false))
-					}
+					_eventFlow.emit(UiEvents.ShowSnackBar("Restore Note?"))
 				}
 			}
 			is NotesEvent.Order -> {
 				if (state.value.noteOrder::class == event.noteOrder::class && state.value.noteOrder.orderType == event.noteOrder.orderType) return
 				getNotes(event.noteOrder)
 			}
-			NotesEvent.DeleteConfirmation -> {
+			is NotesEvent.DeleteConfirmation -> {
 				viewModelScope.launch {
 					deleteConfirmationJob?.cancel()
 					deleteConfirmationJob = launch {
-						_eventFlow.emit(UiEvents.DeleteConfirmation(true))
+					_eventFlow.emit(UiEvents.DeleteConfirmation(note = event.note, show = true))
 					}
 				}
 			}
@@ -71,16 +63,15 @@ class NotesViewModel
 				viewModelScope.launch {
 					deleteConfirmationJob?.cancel()
 					deleteConfirmationJob = launch {
-						_eventFlow.emit(UiEvents.DeleteConfirmation(false))
+						_eventFlow.emit(UiEvents.DeleteConfirmation(show = false))
 					}
 				}
 			}
 			NotesEvent.Restore -> {
 				viewModelScope.launch {
-					snackBarJob?.cancel()
 					noteUseCases.addNote(recentlyDeletedNote ?: return@launch)
 					recentlyDeletedNote = null
-					_eventFlow.emit(UiEvents.ShowSnackBar(show = false))
+					_eventFlow.emit(UiEvents.Restored(recentlyDeletedNote))
 				}
 			}
 			NotesEvent.ToggleOrderSection -> {
