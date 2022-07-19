@@ -7,6 +7,8 @@ import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,6 +36,12 @@ fun AddEditNoteScreen(
 			)
 			else -> {}
 		}
+	}
+
+	val focusRequester = remember { FocusRequester() }
+
+	LaunchedEffect(true) {
+		focusRequester.requestFocus()
 	}
 
 	Scaffold(
@@ -68,7 +76,9 @@ fun AddEditNoteScreen(
 				onValueChange = { viewModel.onEvent(AddEditNoteEvent.EnteredTitle(it)) }
 			)
 			TransparentTextField(
-				modifier = Modifier.fillMaxSize(),
+				modifier = Modifier
+					.fillMaxSize()
+					.focusRequester(focusRequester),
 				text = content.text,
 				hint = content.hint,
 				onValueChange = { viewModel.onEvent(AddEditNoteEvent.EnteredContent(it)) }
