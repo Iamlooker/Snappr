@@ -94,7 +94,7 @@ fun NoteItem(
 							maxLines = 1
 						)
 					}
-					if (note.title.isNotBlank()) {
+					if (note.content.isNotBlank()) {
 						Text(
 							text = note.content,
 							style = MaterialTheme.typography.bodyMedium,
