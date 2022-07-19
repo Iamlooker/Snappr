@@ -55,7 +55,7 @@ class NotesViewModel
 				viewModelScope.launch {
 					deleteConfirmationJob?.cancel()
 					deleteConfirmationJob = launch {
-					_eventFlow.emit(UiEvents.DeleteConfirmation(note = event.note, show = true))
+					_eventFlow.emit(UiEvents.DeleteConfirmation(note = event.note, show = true, output = false))
 					}
 				}
 			}
@@ -63,7 +63,7 @@ class NotesViewModel
 				viewModelScope.launch {
 					deleteConfirmationJob?.cancel()
 					deleteConfirmationJob = launch {
-						_eventFlow.emit(UiEvents.DeleteConfirmation(show = false))
+						_eventFlow.emit(UiEvents.DeleteConfirmation(show = false, output = true))
 					}
 				}
 			}

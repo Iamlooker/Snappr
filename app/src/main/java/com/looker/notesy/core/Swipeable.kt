@@ -8,30 +8,15 @@ import androidx.compose.foundation.gestures.DraggableState
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.lerp
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import com.looker.notesy.core.SwipeableDefaults.AnimationSpec
 import com.looker.notesy.core.SwipeableDefaults.StandardResistanceFactor
@@ -39,7 +24,6 @@ import com.looker.notesy.core.SwipeableDefaults.VelocityThreshold
 import com.looker.notesy.core.SwipeableDefaults.resistanceConfig
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
@@ -112,8 +96,8 @@ open class SwipeableState<T>(
 			.filter { it.isNotEmpty() }
 			.take(1)
 
-	internal var minBound = Float.NEGATIVE_INFINITY
-	internal var maxBound = Float.POSITIVE_INFINITY
+	private var minBound = Float.NEGATIVE_INFINITY
+	private var maxBound = Float.POSITIVE_INFINITY
 
 	internal fun ensureInit(newAnchors: Map<Float, T>) {
 		if (anchors.isEmpty()) {
@@ -279,24 +263,8 @@ open class SwipeableState<T>(
 	 * This will be either 1f if it is is moving from left to right or top to bottom, -1f if it is
 	 * moving from right to left or bottom to top, or 0f if no swipe or animation is in progress.
 	 */
-	val direction: Float
+	private val direction: Float
 		get() = anchors.getOffset(currentValue)?.let { sign(offset.value - it) } ?: 0f
-
-	/**
-	 * Set the state without any animation and suspend until it's set
-	 *
-	 * @param targetValue The new target value to set [currentValue] to.
-	 */
-	suspend fun snapTo(targetValue: T) {
-		latestNonEmptyAnchorsFlow.collect { anchors ->
-			val targetOffset = anchors.getOffset(targetValue)
-			requireNotNull(targetOffset) {
-				"The target value must have an associated anchor."
-			}
-			snapInternalToOffset(targetOffset)
-			currentValue = targetValue
-		}
-	}
 
 	/**
 	 * Set the state to the target value by starting an animation.
@@ -459,43 +427,6 @@ fun <T : Any> rememberSwipeableState(
 			confirmStateChange = confirmStateChange
 		)
 	}
-}
-
-/**
- * Create and [remember] a [SwipeableState] which is kept in sync with another state, i.e.:
- *  1. Whenever the [value] changes, the [SwipeableState] will be animated to that new value.
- *  2. Whenever the value of the [SwipeableState] changes (e.g. after a swipe), the owner of the
- *  [value] will be notified to update their state to the new value of the [SwipeableState] by
- *  invoking [onValueChange]. If the owner does not update their state to the provided value for
- *  some reason, then the [SwipeableState] will perform a rollback to the previous, correct value.
- */
-@Composable
-internal fun <T : Any> rememberSwipeableStateFor(
-	value: T,
-	onValueChange: (T) -> Unit,
-	animationSpec: AnimationSpec<Float> = AnimationSpec
-): SwipeableState<T> {
-	val swipeableState = remember {
-		SwipeableState(
-			initialValue = value,
-			animationSpec = animationSpec,
-			confirmStateChange = { true }
-		)
-	}
-	val forceAnimationCheck = remember { mutableStateOf(false) }
-	LaunchedEffect(value, forceAnimationCheck.value) {
-		if (value != swipeableState.currentValue) {
-			swipeableState.animateTo(value)
-		}
-	}
-	DisposableEffect(swipeableState.currentValue) {
-		if (value != swipeableState.currentValue) {
-			onValueChange(swipeableState.currentValue)
-			forceAnimationCheck.value = !forceAnimationCheck.value
-		}
-		onDispose { }
-	}
-	return swipeableState
 }
 
 /**
@@ -819,49 +750,3 @@ object SwipeableDefaults {
 		}
 	}
 }
-
-// temp default nested scroll connection for swipeables which desire as an opt in
-// revisit in b/174756744 as all types will have their own specific connection probably
-internal val <T> SwipeableState<T>.PreUpPostDownNestedScrollConnection: NestedScrollConnection
-	get() = object : NestedScrollConnection {
-		override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-			val delta = available.toFloat()
-			return if (delta < 0 && source == NestedScrollSource.Drag) {
-				performDrag(delta).toOffset()
-			} else {
-				Offset.Zero
-			}
-		}
-
-		override fun onPostScroll(
-			consumed: Offset,
-			available: Offset,
-			source: NestedScrollSource
-		): Offset {
-			return if (source == NestedScrollSource.Drag) {
-				performDrag(available.toFloat()).toOffset()
-			} else {
-				Offset.Zero
-			}
-		}
-
-		override suspend fun onPreFling(available: Velocity): Velocity {
-			val toFling = Offset(available.x, available.y).toFloat()
-			return if (toFling < 0 && offset.value > minBound) {
-				performFling(velocity = toFling)
-				// since we go to the anchor with tween settling, consume all for the best UX
-				available
-			} else {
-				Velocity.Zero
-			}
-		}
-
-		override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-			performFling(velocity = Offset(available.x, available.y).toFloat())
-			return available
-		}
-
-		private fun Float.toOffset(): Offset = Offset(0f, this)
-
-		private fun Offset.toFloat(): Float = this.y
-	}

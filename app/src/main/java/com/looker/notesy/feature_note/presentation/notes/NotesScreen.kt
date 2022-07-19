@@ -1,35 +1,13 @@
 package com.looker.notesy.feature_note.presentation.notes
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.add
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.material3.TopAppBarDefaults.pinnedScrollBehavior
-import androidx.compose.material3.rememberTopAppBarScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -133,8 +111,13 @@ fun NotesScreen(
 							route = Screen.AddEditNoteScreen.route + "?noteId=${note.id}"
 						)
 					},
-					restore = if (eventFlow is UiEvents.Restored) true
-					else eventFlow is UiEvents.Restored && (eventFlow as UiEvents.Restored).note != note,
+					restore = when (eventFlow) {
+						UiEvents.EMPTY -> false
+						is UiEvents.DeleteConfirmation -> (eventFlow as UiEvents.DeleteConfirmation).output
+						is UiEvents.Restored -> true
+						is UiEvents.ShowSnackBar -> true
+						UiEvents.SaveNote -> true
+					},
 					onDismiss = { viewModel.onEvent(NotesEvent.DeleteConfirmation(note)) }
 				)
 			}
