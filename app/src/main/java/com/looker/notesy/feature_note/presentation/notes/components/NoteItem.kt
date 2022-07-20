@@ -1,26 +1,18 @@
 package com.looker.notesy.feature_note.presentation.notes.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.absolutePadding
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,6 +21,8 @@ import com.looker.notesy.core.DismissValue
 import com.looker.notesy.core.SwipeToDismiss
 import com.looker.notesy.core.rememberDismissState
 import com.looker.notesy.feature_note.domain.model.Note
+import com.looker.notesy.feature_note.presentation.utils.SymbolAnnotationType
+import com.looker.notesy.feature_note.presentation.utils.noteFormatter
 import com.looker.notesy.ui.theme.NotesyTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,24 +82,55 @@ fun NoteItem(
 					verticalArrangement = Arrangement.Center
 				) {
 					if (note.title.isNotBlank()) {
-						Text(
-							text = note.title,
+						AnnotatedNoteText(
+							message = note.title,
 							style = MaterialTheme.typography.titleLarge,
-							maxLines = 1
+							noteClicked = {}
 						)
 					}
 					if (note.content.isNotBlank()) {
-						Text(
-							text = note.content,
+						AnnotatedNoteText(
+							message = note.content,
 							style = MaterialTheme.typography.bodyMedium,
 							maxLines = 8,
-							overflow = TextOverflow.Ellipsis
+							noteClicked = {}
 						)
 					}
 				}
 			}
 		}
 	}
+}
+
+@Composable
+fun AnnotatedNoteText(
+	message: String,
+	style: TextStyle,
+	maxLines: Int = 1,
+	overflow: TextOverflow = TextOverflow.Clip,
+	noteClicked: (String) -> Unit
+) {
+	val uriHandler = LocalUriHandler.current
+
+	val styleText = noteFormatter(text = message, primary = true)
+
+	ClickableText(
+		text = styleText,
+		maxLines = maxLines,
+		overflow = overflow,
+		style = style,
+		onClick = {
+			styleText
+				.getStringAnnotations(start = it, end = it)
+				.firstOrNull()
+				?.let { annotation ->
+					when (annotation.tag) {
+						SymbolAnnotationType.NOTE.name -> noteClicked(annotation.item)
+						SymbolAnnotationType.LINK.name -> uriHandler.openUri(annotation.item)
+					}
+				}
+		}
+	)
 }
 
 @Preview

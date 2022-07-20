@@ -1,6 +1,5 @@
 package com.looker.notesy.feature_note.domain.use_case
 
-import com.google.common.truth.ExpectFailure
 import com.google.common.truth.Truth.assertThat
 import com.looker.notesy.feature_note.data.repository.FakeNoteRepository
 import com.looker.notesy.feature_note.domain.model.Note
@@ -42,7 +41,7 @@ class GetNotesTest {
 		val notes = getNotes(NoteOrder.Title(OrderType.Ascending)).first()
 
 		for (i in 0..notes.size - 2) {
-			assertThat(notes[i].title).isLessThan(notes[i+1].title)
+			assertThat(notes[i].title).isLessThan(notes[i + 1].title)
 		}
 	}
 
