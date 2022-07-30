@@ -4,10 +4,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.looker.notesy.ui.theme.NotesyTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransparentTextField(
 	text: String,
@@ -34,7 +36,7 @@ fun TransparentTextField(
 		onValueChange = onValueChange,
 		singleLine = singleLine,
 		colors = textFieldColor,
-		shape = Shapes.None,
+		shape = RectangleShape,
 		textStyle = textStyle
 	)
 }
