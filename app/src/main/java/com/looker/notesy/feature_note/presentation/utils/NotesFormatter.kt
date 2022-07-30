@@ -27,22 +27,14 @@ typealias StringAnnotation = AnnotatedString.Range<String>
 typealias SymbolAnnotation = Pair<AnnotatedString, StringAnnotation?>
 
 @Composable
-fun noteFormatter(
-	text: String,
-	primary: Boolean
-): AnnotatedString {
+fun noteFormatter(text: String): AnnotatedString {
 	val tokens = symbolPattern.findAll(text)
 
 	return buildAnnotatedString {
 
 		var cursorPosition = 0
 
-		val codeSnippetBackground =
-			if (primary) {
-				MaterialTheme.colorScheme.secondary
-			} else {
-				MaterialTheme.colorScheme.surface
-			}
+		val codeSnippetBackground = MaterialTheme.colorScheme.surface
 
 		for (token in tokens) {
 			append(text.slice(cursorPosition until token.range.first))
@@ -50,7 +42,6 @@ fun noteFormatter(
 			val (annotatedString, stringAnnotation) = getSymbolAnnotation(
 				matchResult = token,
 				colorScheme = MaterialTheme.colorScheme,
-				primary = primary,
 				codeSnippetBackground = codeSnippetBackground
 			)
 			append(annotatedString)
@@ -80,7 +71,6 @@ fun noteFormatter(
 private fun getSymbolAnnotation(
 	matchResult: MatchResult,
 	colorScheme: ColorScheme,
-	primary: Boolean,
 	codeSnippetBackground: Color
 ): SymbolAnnotation {
 	return when (matchResult.value.first()) {
@@ -88,7 +78,7 @@ private fun getSymbolAnnotation(
 			AnnotatedString(
 				text = matchResult.value,
 				spanStyle = SpanStyle(
-					color = if (primary) colorScheme.inversePrimary else colorScheme.primary,
+					color = colorScheme.primary,
 					fontWeight = FontWeight.Bold
 				)
 			),
@@ -122,7 +112,7 @@ private fun getSymbolAnnotation(
 		)
 		'`' -> SymbolAnnotation(
 			AnnotatedString(
-				text = matchResult.value.trim('`'),
+				text = matchResult.value.replace('`', ' '),
 				spanStyle = SpanStyle(
 					fontFamily = FontFamily.Monospace,
 					fontSize = 12.sp,
@@ -136,7 +126,7 @@ private fun getSymbolAnnotation(
 			AnnotatedString(
 				text = matchResult.value,
 				spanStyle = SpanStyle(
-					color = if (primary) colorScheme.inversePrimary else colorScheme.primary
+					color = colorScheme.primary
 				)
 			),
 			StringAnnotation(

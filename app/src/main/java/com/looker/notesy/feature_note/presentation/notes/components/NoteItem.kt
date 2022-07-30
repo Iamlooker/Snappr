@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
@@ -17,7 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.looker.notesy.core.DismissDirection
-import com.looker.notesy.core.DismissValue
+import com.looker.notesy.core.DismissState
 import com.looker.notesy.core.SwipeToDismiss
 import com.looker.notesy.core.rememberDismissState
 import com.looker.notesy.feature_note.domain.model.Note
@@ -30,22 +29,9 @@ import com.looker.notesy.ui.theme.NotesyTheme
 fun NoteItem(
 	note: Note,
 	modifier: Modifier = Modifier,
-	restore: Boolean = true,
-	onNoteClick: () -> Unit = {},
-	onDismiss: () -> Unit = {}
+	state: DismissState = rememberDismissState(),
+	onNoteClick: () -> Unit = {}
 ) {
-	val state = rememberDismissState(
-		confirmStateChange = {
-			if (it == DismissValue.DismissedToStart || it == DismissValue.DismissedToEnd) {
-				onDismiss()
-			}
-			true
-		}
-	)
-	LaunchedEffect(restore) {
-		if (restore) state.reset()
-	}
-
 	ElevatedCard(
 		modifier = modifier.fillMaxWidth(),
 		shape = MaterialTheme.shapes.extraLarge,
@@ -82,18 +68,18 @@ fun NoteItem(
 					verticalArrangement = Arrangement.Center
 				) {
 					if (note.title.isNotBlank()) {
-						AnnotatedNoteText(
+						NoteText(
 							message = note.title,
 							style = MaterialTheme.typography.titleLarge,
-							noteClicked = {}
+							noteClicked = { onNoteClick() }
 						)
 					}
 					if (note.content.isNotBlank()) {
-						AnnotatedNoteText(
+						NoteText(
 							message = note.content,
 							style = MaterialTheme.typography.bodyMedium,
 							maxLines = 8,
-							noteClicked = {}
+							noteClicked = { onNoteClick() }
 						)
 					}
 				}
@@ -103,7 +89,7 @@ fun NoteItem(
 }
 
 @Composable
-fun AnnotatedNoteText(
+fun NoteText(
 	message: String,
 	style: TextStyle,
 	maxLines: Int = 1,
@@ -112,13 +98,13 @@ fun AnnotatedNoteText(
 ) {
 	val uriHandler = LocalUriHandler.current
 
-	val styleText = noteFormatter(text = message, primary = true)
+	val styleText = noteFormatter(text = message)
 
 	ClickableText(
 		text = styleText,
 		maxLines = maxLines,
 		overflow = overflow,
-		style = style,
+		style = style.copy(color = LocalContentColor.current),
 		onClick = {
 			styleText
 				.getStringAnnotations(start = it, end = it)
