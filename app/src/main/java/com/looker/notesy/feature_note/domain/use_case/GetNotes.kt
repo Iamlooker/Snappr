@@ -13,20 +13,23 @@ class GetNotes(private val repository: NoteRepository) {
 		noteOrder: NoteOrder = NoteOrder.Date(OrderType.Descending)
 	): Flow<List<Note>> {
 		return repository.getNotes().map { notes ->
-			when(noteOrder.orderType) {
+			when (noteOrder.orderType) {
 				is OrderType.Ascending -> {
-					when(noteOrder) {
-						is NoteOrder.Title -> notes.sortedBy { it.title.lowercase() }
+					when (noteOrder) {
+						is NoteOrder.Title -> notes.sortedBy { it.titleOrContent.lowercase() }
 						is NoteOrder.Date -> notes.sortedBy { it.timeCreated }
 					}
 				}
 				is OrderType.Descending -> {
-					when(noteOrder) {
-						is NoteOrder.Title -> notes.sortedByDescending { it.title.lowercase() }
+					when (noteOrder) {
+						is NoteOrder.Title -> notes.sortedByDescending { it.titleOrContent.lowercase() }
 						is NoteOrder.Date -> notes.sortedByDescending { it.timeCreated }
 					}
 				}
 			}
 		}
 	}
+
+	private val Note.titleOrContent get() = title.ifEmpty { content }
+
 }
