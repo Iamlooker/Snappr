@@ -47,7 +47,6 @@ fun AddEditNoteScreen(
 	Scaffold(
 		modifier = Modifier
 			.fillMaxSize()
-			.navigationBarsPadding()
 			.imePadding(),
 		floatingActionButton = {
 			FloatingActionButton(onClick = { viewModel.onEvent(AddEditNoteEvent.SaveNote) }) {
@@ -61,10 +60,7 @@ fun AddEditNoteScreen(
 		Column(
 			modifier = Modifier
 				.background(MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp))
-				.padding(
-					top = paddingValues.calculateTopPadding() + 64.dp,
-					bottom = paddingValues.calculateBottomPadding()
-				)
+				.padding(paddingValues)
 		) {
 			TransparentTextField(
 				modifier = Modifier.fillMaxWidth(),

@@ -2,34 +2,14 @@ package com.looker.notesy.feature_note.presentation.notes
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.add
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.material3.TopAppBarDefaults.pinnedScrollBehavior
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -58,7 +38,7 @@ fun NotesScreen(
 ) {
 	val state by viewModel.state.collectAsState()
 	val topAppBarScrollBehavior = rememberTopAppBarState()
-	val scrollBehavior = remember { pinnedScrollBehavior(topAppBarScrollBehavior) }
+	val scrollBehavior = pinnedScrollBehavior(topAppBarScrollBehavior)
 	val eventFlow by viewModel.eventFlow.collectAsState(UiEvents.EMPTY)
 	val snackbarHost = remember { SnackbarHostState() }
 	LaunchedEffect(eventFlow) {
@@ -75,12 +55,8 @@ fun NotesScreen(
 			.nestedScroll(scrollBehavior.nestedScrollConnection),
 		topBar = {
 			CenterAlignedTopAppBar(
-				modifier = Modifier.windowInsetsTopHeight(
-					WindowInsets.statusBars.add(WindowInsets(top = 64.dp))
-				),
 				title = {
 					Text(
-						modifier = Modifier.statusBarsPadding(),
 						text = stringResource(id = R.string.app_name),
 						style = MaterialTheme.typography.headlineMedium
 					)
@@ -90,7 +66,7 @@ fun NotesScreen(
 		},
 		floatingActionButton = {
 			FloatingActionButton(
-				modifier = Modifier.navigationBarsPadding(),
+				containerColor = MaterialTheme.colorScheme.tertiaryContainer,
 				onClick = { navController.navigate(Screen.AddEditNoteScreen.route) }
 			) {
 				Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
@@ -112,11 +88,7 @@ fun NotesScreen(
 		}
 	) { paddingValue ->
 		LazyColumn(
-			contentPadding = PaddingValues(
-				top = paddingValue.calculateTopPadding(),
-				bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-						+ 12.dp
-			),
+			contentPadding = paddingValue,
 			verticalArrangement = Arrangement.spacedBy(12.dp)
 		) {
 			item {
@@ -126,7 +98,7 @@ fun NotesScreen(
 			}
 			items(
 				items = state.notesList,
-				key = { note -> note.id ?: 0 }
+				key = { note -> note.id ?: -1 }
 			) { note ->
 				val dismissState = rememberDismissState(
 					confirmStateChange = {
