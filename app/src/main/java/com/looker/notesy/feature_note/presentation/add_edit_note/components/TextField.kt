@@ -9,7 +9,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.looker.notesy.ui.theme.NotesyTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransparentTextField(
 	text: String,
@@ -21,9 +20,11 @@ fun TransparentTextField(
 	contentColor: Color = MaterialTheme.colorScheme.onBackground,
 	textStyle: TextStyle = LocalTextStyle.current
 ) {
-	val textFieldColor = TextFieldDefaults.textFieldColors(
-		containerColor = containerColor,
-		textColor = contentColor,
+	val textFieldColor = TextFieldDefaults.colors(
+		focusedContainerColor = containerColor,
+		unfocusedContainerColor = containerColor,
+		focusedTextColor = contentColor,
+		unfocusedTextColor = contentColor,
 		focusedIndicatorColor = Color.Transparent,
 		unfocusedIndicatorColor = Color.Transparent
 	)

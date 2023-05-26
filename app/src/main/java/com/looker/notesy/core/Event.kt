@@ -7,5 +7,4 @@ sealed class UiEvents {
 	data class Restored(val note: Note?) : UiEvents()
 	data class ShowSnackBar(val message: String = "") : UiEvents()
 	data class DeleteConfirmation(val note: Note? = null, val show: Boolean = false, val output: Boolean) : UiEvents()
-	object SaveNote : UiEvents()
 }

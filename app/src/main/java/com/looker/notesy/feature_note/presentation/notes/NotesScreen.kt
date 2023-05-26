@@ -20,13 +20,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.looker.notesy.R
 import com.looker.notesy.core.UiEvents
 import com.looker.notesy.feature_note.presentation.notes.components.DeleteDialog
 import com.looker.notesy.feature_note.presentation.notes.components.NoteItem
 import com.looker.notesy.feature_note.presentation.notes.components.OrderChips
-import com.looker.notesy.feature_note.presentation.utils.Screen
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
