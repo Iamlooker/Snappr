@@ -22,9 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.looker.notesy.R
-import com.looker.notesy.core.DismissValue
 import com.looker.notesy.core.UiEvents
-import com.looker.notesy.core.rememberDismissState
 import com.looker.notesy.feature_note.presentation.notes.components.DeleteDialog
 import com.looker.notesy.feature_note.presentation.notes.components.NoteItem
 import com.looker.notesy.feature_note.presentation.notes.components.OrderChips
@@ -101,7 +99,7 @@ fun NotesScreen(
 				key = { note -> note.id ?: -1 }
 			) { note ->
 				val dismissState = rememberDismissState(
-					confirmStateChange = {
+					confirmValueChange = {
 						if (it == DismissValue.DismissedToStart || it == DismissValue.DismissedToEnd) {
 							viewModel.onEvent(NotesEvent.DeleteConfirmation(note))
 						}
@@ -115,6 +113,7 @@ fun NotesScreen(
 							if ((eventFlow as UiEvents.DeleteConfirmation).output)
 								dismissState.reset()
 						}
+
 						else -> dismissState.reset()
 					}
 				}

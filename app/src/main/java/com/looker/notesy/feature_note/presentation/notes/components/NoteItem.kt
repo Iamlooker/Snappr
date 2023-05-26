@@ -13,10 +13,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.looker.notesy.core.DismissDirection
-import com.looker.notesy.core.DismissState
-import com.looker.notesy.core.SwipeToDismiss
-import com.looker.notesy.core.rememberDismissState
 import com.looker.notesy.feature_note.domain.model.Note
 import com.looker.notesy.feature_note.presentation.utils.noteFormatter
 import com.looker.notesy.ui.theme.NotesyTheme
@@ -55,35 +51,36 @@ fun NoteItem(
 				) {
 					Icon(imageVector = Icons.Rounded.Delete, contentDescription = null)
 				}
-			}
-		) {
-			Surface(
-				modifier = Modifier.fillMaxWidth(),
-				color = MaterialTheme.colorScheme.surfaceVariant,
-				tonalElevation = 8.dp,
-				shape = MaterialTheme.shapes.extraLarge
-			) {
-				Column(
-					modifier = Modifier.padding(16.dp),
-					horizontalAlignment = Alignment.Start,
-					verticalArrangement = Arrangement.Center
+			},
+			dismissContent = {
+				Surface(
+					modifier = Modifier.fillMaxWidth(),
+					color = MaterialTheme.colorScheme.surfaceVariant,
+					tonalElevation = 8.dp,
+					shape = MaterialTheme.shapes.extraLarge
 				) {
-					if (note.title.isNotBlank()) {
-						NoteText(
-							message = note.title,
-							style = MaterialTheme.typography.titleLarge
-						)
-					}
-					if (note.content.isNotBlank()) {
-						NoteText(
-							message = note.content,
-							style = MaterialTheme.typography.bodyMedium,
-							maxLines = 8
-						)
+					Column(
+						modifier = Modifier.padding(16.dp),
+						horizontalAlignment = Alignment.Start,
+						verticalArrangement = Arrangement.Center
+					) {
+						if (note.title.isNotBlank()) {
+							NoteText(
+								message = note.title,
+								style = MaterialTheme.typography.titleLarge
+							)
+						}
+						if (note.content.isNotBlank()) {
+							NoteText(
+								message = note.content,
+								style = MaterialTheme.typography.bodyMedium,
+								maxLines = 8
+							)
+						}
 					}
 				}
 			}
-		}
+		)
 	}
 }
 
@@ -104,6 +101,7 @@ fun NoteText(
 	)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun NotePrev() {
