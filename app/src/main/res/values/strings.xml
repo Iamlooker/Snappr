@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Notesy</string>
+
+    <string name="action_restore">Restore</string>
+
+    <string name="hint_title">Title…</string>
+    <string name="hint_content">Content…</string>
+
+    <string name="label_restore_note">Restore Note?</string>
 </resources>

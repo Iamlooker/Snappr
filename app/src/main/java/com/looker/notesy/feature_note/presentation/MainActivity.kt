@@ -16,7 +16,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.looker.notesy.feature_note.presentation.add_edit_note.AddEditNoteScreen
 import com.looker.notesy.feature_note.presentation.notes.NotesScreen
-import com.looker.notesy.feature_note.presentation.utils.Screen
+import com.looker.notesy.feature_note.presentation.utils.ADD_EDIT_SCREEN_ROUTE
+import com.looker.notesy.feature_note.presentation.utils.NOTES_SCREEN_ROUTE
 import com.looker.notesy.ui.theme.NotesyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,20 +43,20 @@ fun Notesy() {
 		val navController = rememberNavController()
 		NavHost(
 			navController = navController,
-			startDestination = Screen.NotesScreen.route
+			startDestination = NOTES_SCREEN_ROUTE
 		) {
-			composable(route = Screen.NotesScreen.route) {
+			composable(route = NOTES_SCREEN_ROUTE) {
 				NotesScreen(
 					onNoteClick = {
-						navController.navigate(Screen.AddEditNoteScreen.route + "?noteId=${it}")
+						navController.navigate("$ADD_EDIT_SCREEN_ROUTE?noteId=${it}")
 					},
 					onCreateNewClick = {
-						navController.navigate(Screen.AddEditNoteScreen.route)
+						navController.navigate(ADD_EDIT_SCREEN_ROUTE)
 					}
 				)
 			}
 			composable(
-				route = Screen.AddEditNoteScreen.route + "?noteId={noteId}",
+				route = "$ADD_EDIT_SCREEN_ROUTE?noteId={noteId}",
 				arguments = listOf(
 					navArgument(name = "noteId") {
 						type = NavType.IntType

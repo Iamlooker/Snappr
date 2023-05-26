@@ -34,16 +34,14 @@ fun NotesScreen(
 	onNoteClick: (Int?) -> Unit
 ) {
 	val state by viewModel.state.collectAsState()
+	val deleteNoteConfirmation = state.showDeleteDialog
 	val topAppBarScrollBehavior = rememberTopAppBarState()
 	val scrollBehavior = pinnedScrollBehavior(topAppBarScrollBehavior)
 	val eventFlow by viewModel.eventFlow.collectAsState(UiEvents.EMPTY)
 	val snackbarHost = remember { SnackbarHostState() }
 	LaunchedEffect(eventFlow) {
 		if (eventFlow is UiEvents.ShowSnackBar) {
-			snackbarHost.showSnackbar(
-				message = (eventFlow as UiEvents.ShowSnackBar).message,
-				actionLabel = "Restore"
-			)
+			snackbarHost.showSnackbar((eventFlow as UiEvents.ShowSnackBar).message)
 		}
 	}
 	Scaffold(
@@ -74,8 +72,8 @@ fun NotesScreen(
 				Snackbar(
 					modifier = Modifier.padding(16.dp),
 					action = {
-						FilledTonalButton(onClick = { viewModel.onEvent(NotesEvent.Restore) }) {
-							Text(text = "Restore")
+						FilledTonalButton(onClick = viewModel::restoreNote) {
+							Text(text = stringResource(R.string.action_restore))
 						}
 					}
 				) {
@@ -90,7 +88,7 @@ fun NotesScreen(
 		) {
 			item {
 				OrderChips(noteOrder = state.noteOrder) { notesOrder ->
-					viewModel.onEvent(NotesEvent.Order(notesOrder))
+					viewModel.reorderNotes(notesOrder)
 				}
 			}
 			items(
@@ -100,21 +98,13 @@ fun NotesScreen(
 				val dismissState = rememberDismissState(
 					confirmValueChange = {
 						if (it == DismissValue.DismissedToStart || it == DismissValue.DismissedToEnd) {
-							viewModel.onEvent(NotesEvent.DeleteConfirmation(note))
+							viewModel.showDeleteDialog(note)
 						}
 						true
 					}
 				)
-				LaunchedEffect(eventFlow) {
-					when (eventFlow) {
-						UiEvents.EMPTY -> {}
-						is UiEvents.DeleteConfirmation -> {
-							if ((eventFlow as UiEvents.DeleteConfirmation).output)
-								dismissState.reset()
-						}
-
-						else -> dismissState.reset()
-					}
+				LaunchedEffect(deleteNoteConfirmation) {
+					if (deleteNoteConfirmation != null) dismissState.reset()
 				}
 				NoteItem(
 					note = note,
@@ -126,14 +116,12 @@ fun NotesScreen(
 				)
 			}
 		}
-		if (eventFlow is UiEvents.DeleteConfirmation && (eventFlow as UiEvents.DeleteConfirmation).show) {
-			(eventFlow as UiEvents.DeleteConfirmation).note?.let { note ->
-				DeleteDialog(
-					note = note,
-					onConfirm = { viewModel.onEvent(NotesEvent.Delete(note)) },
-					onDismiss = { viewModel.onEvent(NotesEvent.RemoveDeleteConfirmation) }
-				)
-			}
+		if (deleteNoteConfirmation != null) {
+			DeleteDialog(
+				note = deleteNoteConfirmation,
+				onConfirm = { viewModel.deleteNote(deleteNoteConfirmation) },
+				onDismiss = { viewModel.showDeleteDialog() }
+			)
 		}
 	}
 }

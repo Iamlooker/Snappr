@@ -12,8 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.looker.notesy.R
 import com.looker.notesy.feature_note.presentation.add_edit_note.components.TransparentTextField
 
 @Composable
@@ -56,7 +58,7 @@ fun AddEditNoteScreen(
 				TransparentTextField(
 					modifier = Modifier.fillMaxWidth(),
 					text = viewModel.noteTitle,
-					hint = "Title...",
+					hint = stringResource(R.string.hint_title),
 					singleLine = true,
 					containerColor = Color.Transparent,
 					textStyle = MaterialTheme.typography.titleLarge,
@@ -67,7 +69,7 @@ fun AddEditNoteScreen(
 						.fillMaxSize()
 						.focusRequester(focusRequester),
 					text = viewModel.noteContent,
-					hint = "Content...",
+					hint = stringResource(R.string.hint_content),
 					onValueChange = viewModel::updateContent
 				)
 			}
