@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -29,17 +29,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
     }
     buildFeatures {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.4.0"
+        kotlinCompilerExtensionVersion "1.4.7"
     }
     packagingOptions {
         resources {
@@ -53,35 +53,35 @@ dependencies {
     implementation composeBom
     androidTestImplementation composeBom
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.activity:activity-compose:1.6.1")
+    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.activity:activity-compose:1.7.1")
 
     // Compose Runtime
     implementation("androidx.compose.runtime:runtime")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.material:material-icons-extended")
-    implementation('androidx.compose.material3:material3:1.0.1')
+    implementation('androidx.compose.material3:material3')
     implementation("androidx.compose.ui:ui-tooling-preview")
 
     // Lifecycle
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
+    implementation('androidx.lifecycle:lifecycle-runtime-ktx:2.6.1')
+    implementation('androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1')
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
     // Coroutines
-    implementation('org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4')
-    implementation('org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4')
+    implementation('org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1')
+    implementation('org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1')
 
     // Hilt
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    implementation("com.google.dagger:hilt-android:2.44.2")
-    kapt("com.google.dagger:hilt-compiler:2.44.2")
+    implementation('com.google.dagger:hilt-android:2.46.1')
+    kapt('com.google.dagger:hilt-compiler:2.46.1')
 
     // Room
-    implementation("androidx.room:room-runtime:2.5.0")
-    implementation("androidx.room:room-ktx:2.5.0")
-    kapt("androidx.room:room-compiler:2.5.0")
+    implementation('androidx.room:room-runtime:2.5.1')
+    implementation('androidx.room:room-ktx:2.5.1')
+    kapt('androidx.room:room-compiler:2.5.1')
 
     // Test
     testImplementation("junit:junit:4.13.2")
