@@ -31,8 +31,9 @@ import com.looker.notesy.feature_note.presentation.utils.Screen
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun NotesScreen(
-	navController: NavController,
-	viewModel: NotesViewModel = hiltViewModel()
+	viewModel: NotesViewModel = hiltViewModel(),
+	onCreateNewClick: () -> Unit,
+	onNoteClick: (Int?) -> Unit
 ) {
 	val state by viewModel.state.collectAsState()
 	val topAppBarScrollBehavior = rememberTopAppBarState()
@@ -65,7 +66,7 @@ fun NotesScreen(
 		floatingActionButton = {
 			FloatingActionButton(
 				containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-				onClick = { navController.navigate(Screen.AddEditNoteScreen.route) }
+				onClick = onCreateNewClick
 			) {
 				Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
 			}
@@ -123,11 +124,7 @@ fun NotesScreen(
 					modifier = Modifier
 						.padding(horizontal = 16.dp)
 						.animateItemPlacement(),
-					onNoteClick = {
-						navController.navigate(
-							route = Screen.AddEditNoteScreen.route + "?noteId=${note.id}"
-						)
-					}
+					onNoteClick = { onNoteClick(note.id) }
 				)
 			}
 		}

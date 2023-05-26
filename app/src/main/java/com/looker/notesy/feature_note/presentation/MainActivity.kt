@@ -23,13 +23,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
+		WindowCompat.setDecorFitsSystemWindows(window, false)
 		super.onCreate(savedInstanceState)
 		setContent {
 			NotesyTheme {
 				Notesy()
 			}
 		}
-		WindowCompat.setDecorFitsSystemWindows(window, false)
 	}
 }
 
@@ -45,7 +45,14 @@ fun Notesy() {
 			startDestination = Screen.NotesScreen.route
 		) {
 			composable(route = Screen.NotesScreen.route) {
-				NotesScreen(navController = navController)
+				NotesScreen(
+					onNoteClick = {
+						navController.navigate(Screen.AddEditNoteScreen.route + "?noteId=${it}")
+					},
+					onCreateNewClick = {
+						navController.navigate(Screen.AddEditNoteScreen.route)
+					}
+				)
 			}
 			composable(
 				route = Screen.AddEditNoteScreen.route + "?noteId={noteId}",
@@ -56,7 +63,7 @@ fun Notesy() {
 					}
 				)
 			) {
-				AddEditNoteScreen(navController = navController)
+				AddEditNoteScreen(navigateUp = navController::popBackStack)
 			}
 		}
 	}

@@ -17,11 +17,10 @@ import com.looker.notesy.core.UiEvents
 import com.looker.notesy.feature_note.presentation.add_edit_note.components.TransparentTextField
 import com.looker.notesy.feature_note.presentation.utils.extension.surfaceColorAtElevation
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditNoteScreen(
-	navController: NavController,
-	viewModel: AddEditViewModel = hiltViewModel()
+	viewModel: AddEditViewModel = hiltViewModel(),
+	navigateUp: () -> Unit
 ) {
 	val title by viewModel.noteTitle.collectAsState()
 	val content by viewModel.noteContent.collectAsState()
@@ -30,7 +29,7 @@ fun AddEditNoteScreen(
 	val snackbarHost = remember { SnackbarHostState() }
 	LaunchedEffect(snackBarState) {
 		when (snackBarState) {
-			UiEvents.SaveNote -> navController.navigateUp()
+			UiEvents.SaveNote -> navigateUp()
 			is UiEvents.ShowSnackBar -> snackbarHost.showSnackbar(
 				message = (snackBarState as UiEvents.ShowSnackBar).message
 			)
