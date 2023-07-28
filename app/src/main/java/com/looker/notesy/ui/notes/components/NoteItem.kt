@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.looker.notesy.domain.model.Note
 import com.looker.notesy.ui.utils.noteFormatter
 import com.looker.notesy.ui.theme.NotesyTheme
+import com.looker.notesy.ui.utils.LocalSpacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +61,7 @@ fun NoteItem(
 					shape = MaterialTheme.shapes.extraLarge
 				) {
 					Column(
-						modifier = Modifier.padding(16.dp),
+						modifier = Modifier.padding(LocalSpacing.current.border),
 						horizontalAlignment = Alignment.Start,
 						verticalArrangement = Arrangement.Center
 					) {
@@ -69,6 +70,9 @@ fun NoteItem(
 								message = note.title,
 								style = MaterialTheme.typography.titleLarge
 							)
+						}
+						if (note.title.isNotBlank() && note.content.isNotBlank()) {
+							Spacer(modifier = Modifier.height(LocalSpacing.current.text))
 						}
 						if (note.content.isNotBlank()) {
 							NoteText(

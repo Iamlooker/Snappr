@@ -3,8 +3,8 @@
 
     <string name="action_restore">Restore</string>
 
-    <string name="hint_title">Title…</string>
-    <string name="hint_content">Content…</string>
+    <string name="hint_title">Title</string>
+    <string name="hint_content">Content</string>
 
     <string name="label_restore_note">Restore Note?</string>
     <string name="label_undo_delete">Undo Delete</string>

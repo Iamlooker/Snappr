@@ -1,4 +1,4 @@
-package com.looker.notesy.ui
+package com.looker.notesy.ui.utils
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.Dp

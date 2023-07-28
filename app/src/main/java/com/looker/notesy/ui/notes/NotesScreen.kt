@@ -22,7 +22,7 @@ import com.looker.notesy.R
 import com.looker.notesy.ui.notes.components.DeleteDialog
 import com.looker.notesy.ui.notes.components.NoteItem
 import com.looker.notesy.ui.notes.components.OrderChips
-import com.looker.notesy.ui.LocalSpacing
+import com.looker.notesy.ui.utils.LocalSpacing
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -117,7 +117,7 @@ fun NotesScreen(
 			DeleteDialog(
 				note = deleteNoteConfirmation,
 				onConfirm = { viewModel.deleteNote(deleteNoteConfirmation) },
-				onDismiss = { viewModel.showDeleteDialog() }
+				onDismiss = viewModel::showDeleteDialog
 			)
 		}
 	}

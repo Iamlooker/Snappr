@@ -50,7 +50,7 @@ class AddEditViewModel
 		noteContent = content
 	}
 
-	fun saveNote(onSuccess: () -> Unit) {
+	fun saveNote(onSuccess: () -> Unit, showErrorSnackBar: Boolean = true) {
 		viewModelScope.launch {
 			try {
 				noteUseCases.addNote(
@@ -64,7 +64,7 @@ class AddEditViewModel
 				)
 				onSuccess()
 			} catch (e: InvalidNoteException) {
-				errorMessage = e.message ?: "Note not saved"
+				if (showErrorSnackBar) errorMessage = e.message ?: "Note not saved"
 			}
 		}
 	}

@@ -10,8 +10,8 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.looker.notesy.ui.LocalSpacing
-import com.looker.notesy.ui.Spacing
+import com.looker.notesy.ui.utils.LocalSpacing
+import com.looker.notesy.ui.utils.Spacing
 
 private val DarkColorScheme = darkColorScheme(
 	primary = Purple80,

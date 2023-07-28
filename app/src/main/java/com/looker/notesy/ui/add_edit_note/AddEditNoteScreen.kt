@@ -3,7 +3,7 @@ package com.looker.notesy.ui.add_edit_note
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Save
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.looker.notesy.R
 import com.looker.notesy.ui.add_edit_note.components.TransparentTextField
-import com.looker.notesy.ui.LocalSpacing
 
 @Composable
 fun AddEditNoteScreen(
@@ -25,8 +24,7 @@ fun AddEditNoteScreen(
 	navigateUp: () -> Unit
 ) {
 	BackHandler {
-		viewModel.saveNote {}
-		navigateUp()
+		viewModel.saveNote(navigateUp, showErrorSnackBar = false)
 	}
 
 	val errorMessage = viewModel.errorMessage
@@ -52,6 +50,13 @@ fun AddEditNoteScreen(
 	) { paddingValues ->
 		Surface(tonalElevation = 8.dp) {
 			Column(Modifier.padding(paddingValues)) {
+				IconButton(
+					onClick = {
+						viewModel.saveNote(navigateUp, showErrorSnackBar = false)
+					}
+				) {
+					Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
+				}
 				TransparentTextField(
 					modifier = Modifier.fillMaxWidth(),
 					text = viewModel.noteTitle,
