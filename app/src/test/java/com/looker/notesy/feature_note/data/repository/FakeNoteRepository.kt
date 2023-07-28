@@ -1,7 +1,7 @@
 package com.looker.notesy.feature_note.data.repository
 
-import com.looker.notesy.feature_note.domain.model.Note
-import com.looker.notesy.feature_note.domain.repository.NoteRepository
+import com.looker.notesy.domain.model.Note
+import com.looker.notesy.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

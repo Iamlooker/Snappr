@@ -7,4 +7,5 @@
     <string name="hint_content">Content…</string>
 
     <string name="label_restore_note">Restore Note?</string>
+    <string name="label_undo_delete">Undo Delete</string>
 </resources>

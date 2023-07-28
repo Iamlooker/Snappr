@@ -2,10 +2,10 @@ package com.looker.notesy.di
 
 import android.app.Application
 import androidx.room.Room
-import com.looker.notesy.feature_note.data.data_source.NoteDatabase
-import com.looker.notesy.feature_note.data.repository.NoteRepositoryImpl
-import com.looker.notesy.feature_note.domain.repository.NoteRepository
-import com.looker.notesy.feature_note.domain.use_case.*
+import com.looker.notesy.data.data_source.NotesyDatabase
+import com.looker.notesy.data.repository.NoteRepositoryImpl
+import com.looker.notesy.domain.repository.NoteRepository
+import com.looker.notesy.domain.use_case.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,15 +18,15 @@ object AppModule {
 
 	@Provides
 	@Singleton
-	fun provideNoteDatabase(app: Application): NoteDatabase = Room.databaseBuilder(
+	fun provideNoteDatabase(app: Application): NotesyDatabase = Room.databaseBuilder(
 		app,
-		NoteDatabase::class.java,
-		NoteDatabase.DATABASE
+		NotesyDatabase::class.java,
+		NotesyDatabase.DATABASE
 	).build()
 
 	@Provides
 	@Singleton
-	fun providesNoteRepository(db: NoteDatabase): NoteRepository = NoteRepositoryImpl(db.noteDao)
+	fun providesNoteRepository(db: NotesyDatabase): NoteRepository = NoteRepositoryImpl(db.noteDao)
 
 	@Provides
 	@Singleton

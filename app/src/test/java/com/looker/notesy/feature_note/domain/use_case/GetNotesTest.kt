@@ -2,9 +2,10 @@ package com.looker.notesy.feature_note.domain.use_case
 
 import com.google.common.truth.Truth.assertThat
 import com.looker.notesy.feature_note.data.repository.FakeNoteRepository
-import com.looker.notesy.feature_note.domain.model.Note
-import com.looker.notesy.feature_note.domain.utils.NoteOrder
-import com.looker.notesy.feature_note.domain.utils.OrderType
+import com.looker.notesy.domain.model.Note
+import com.looker.notesy.domain.use_case.GetNotes
+import com.looker.notesy.domain.utils.NoteOrder
+import com.looker.notesy.domain.utils.OrderType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before

@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
+    id "com.google.devtools.ksp"
     id 'kotlin-kapt'
 }
 
@@ -39,7 +40,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.4.7"
+        kotlinCompilerExtensionVersion "1.5.1"
     }
     packagingOptions {
         resources {
@@ -49,12 +50,12 @@ android {
 }
 
 dependencies {
-    def composeBom = platform('androidx.compose:compose-bom:2023.05.01')
+    def composeBom = platform('androidx.compose:compose-bom:2023.06.01')
     implementation composeBom
     androidTestImplementation composeBom
 
     implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.activity:activity-compose:1.7.1")
+    implementation("androidx.activity:activity-compose:1.7.2")
 
     // Compose Runtime
     implementation("androidx.compose.runtime:runtime")
@@ -66,22 +67,23 @@ dependencies {
 
     // Lifecycle
     implementation('androidx.lifecycle:lifecycle-runtime-ktx:2.6.1')
+    implementation('androidx.lifecycle:lifecycle-runtime-compose:2.6.1')
     implementation('androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1')
-    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation("androidx.navigation:navigation-compose:2.6.0")
 
     // Coroutines
-    implementation('org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1')
-    implementation('org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1')
+    implementation('org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3')
+    implementation('org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3')
 
     // Hilt
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    implementation('com.google.dagger:hilt-android:2.46.1')
+    implementation('com.google.dagger:hilt-android:2.47')
     kapt('com.google.dagger:hilt-compiler:2.46.1')
 
     // Room
-    implementation('androidx.room:room-runtime:2.5.1')
-    implementation('androidx.room:room-ktx:2.5.1')
-    kapt('androidx.room:room-compiler:2.5.1')
+    implementation('androidx.room:room-runtime:2.5.2')
+    implementation('androidx.room:room-ktx:2.5.2')
+    ksp('androidx.room:room-compiler:2.5.2')
 
     // Test
     testImplementation("junit:junit:4.13.2")
