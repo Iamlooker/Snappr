@@ -18,7 +18,8 @@ fun TransparentTextField(
 	singleLine: Boolean = false,
 	containerColor: Color = MaterialTheme.colorScheme.surface,
 	contentColor: Color = MaterialTheme.colorScheme.onBackground,
-	textStyle: TextStyle = LocalTextStyle.current
+	textStyle: TextStyle = LocalTextStyle.current,
+	isError: Boolean = false
 ) {
 	val textFieldColor = TextFieldDefaults.colors(
 		focusedContainerColor = containerColor,
@@ -38,7 +39,8 @@ fun TransparentTextField(
 		singleLine = singleLine,
 		colors = textFieldColor,
 		shape = RectangleShape,
-		textStyle = textStyle
+		textStyle = textStyle,
+		isError = isError
 	)
 }
 

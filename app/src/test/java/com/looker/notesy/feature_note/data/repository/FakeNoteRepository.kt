@@ -2,9 +2,7 @@ package com.looker.notesy.feature_note.data.repository
 
 import com.looker.notesy.domain.model.Note
 import com.looker.notesy.domain.repository.NoteRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 
 class FakeNoteRepository : NoteRepository {
 
@@ -13,6 +11,8 @@ class FakeNoteRepository : NoteRepository {
 	override fun getNotes(): Flow<List<Note>> = flow { emit(notes) }
 
 	override fun getNoteById(id: Int): Flow<Note?> = getNotes().map { it.find { id == it.id } }
+
+	override fun getLastNoteId(): Flow<Int?> = flowOf(notes.maxBy { it.id!! }.id)
 
 	override suspend fun insertNote(note: Note) {
 		notes.add(note)

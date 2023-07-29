@@ -12,6 +12,8 @@ class NoteRepositoryImpl(
 
 	override fun getNoteById(id: Int): Flow<Note?> = dao.getNoteById(id)
 
+	override fun getLastNoteId(): Flow<Int?> = dao.getLastNoteId()
+
 	override suspend fun insertNote(note: Note) {
 		dao.insertNote(note)
 	}
