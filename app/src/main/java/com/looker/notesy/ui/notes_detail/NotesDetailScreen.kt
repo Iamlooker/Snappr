@@ -1,6 +1,9 @@
 package com.looker.notesy.ui.notes_detail
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
@@ -21,6 +24,7 @@ import com.looker.notesy.ui.components.NavigationAppBar
 import com.looker.notesy.ui.components.NoteId
 import com.looker.notesy.ui.utils.LocalSpacing
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NotesDetailScreen(
 	viewModel: NotesDetailViewModel = hiltViewModel(),
@@ -40,8 +44,25 @@ fun NotesDetailScreen(
 		}
 	) { paddingValues ->
 		Surface(tonalElevation = 8.dp) {
-			Column(Modifier.padding(paddingValues)) {
-				NavigationAppBar(onBackPressed = onBackPressed)
+			Column(
+				modifier = Modifier
+					.padding(paddingValues)
+					.combinedClickable(
+						onDoubleClick = { onEditClicked(note.id!!) },
+						indication = null,
+						interactionSource = MutableInteractionSource(),
+						onClick = {}
+					)
+			) {
+				NavigationAppBar(
+					onBackPressed = onBackPressed,
+					title = {
+						Text(
+							text = stringResource(R.string.label_view_mode),
+							color = MaterialTheme.colorScheme.outline
+						)
+					}
+				)
 				NoteId(
 					modifier = Modifier.padding(LocalSpacing.current.border),
 					text = "# ${note.id}",
