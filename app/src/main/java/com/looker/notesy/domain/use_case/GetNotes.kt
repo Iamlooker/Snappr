@@ -5,16 +5,17 @@ import com.looker.notesy.domain.repository.NoteRepository
 import com.looker.notesy.domain.utils.NoteOrder
 import com.looker.notesy.domain.utils.OrderType
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class GetNotes(private val repository: NoteRepository) {
 
-	operator fun invoke(
-		noteOrder: NoteOrder = NoteOrder.Date(OrderType.Descending)
-	): Flow<List<Note>> {
-		return repository.getNotes().map { notes ->
-			notes.noteOrder(noteOrder)
-		}
+	operator fun invoke(): Flow<List<Note>> {
+		return repository.getNotes()
+	}
+
+	suspend fun contains(id: Int?): Boolean {
+		return repository.getNotes().first().any { it.id == id }
 	}
 }
 

@@ -3,7 +3,6 @@ package com.looker.notesy.ui.notes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.notesy.domain.model.Note
-import com.looker.notesy.domain.repository.NoteRepository
 import com.looker.notesy.domain.use_case.NoteUseCases
 import com.looker.notesy.domain.use_case.noteOrder
 import com.looker.notesy.domain.utils.NoteOrder
@@ -17,8 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotesViewModel @Inject constructor(
-	private val noteUseCases: NoteUseCases,
-	repository: NoteRepository
+	private val noteUseCases: NoteUseCases
 ) : ViewModel() {
 
 	private val sortOrder = MutableStateFlow<NoteOrder>(NoteOrder.Date(OrderType.Descending))
@@ -26,7 +24,7 @@ class NotesViewModel @Inject constructor(
 	private val snackBarMessage = MutableStateFlow<String?>(null)
 
 	val noteState = combine(
-		repository.getNotes(),
+		noteUseCases.getNotes(),
 		sortOrder,
 		deleteConfirmation,
 		snackBarMessage

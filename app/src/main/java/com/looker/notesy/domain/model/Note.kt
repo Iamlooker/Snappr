@@ -13,4 +13,4 @@ data class Note(
 	@PrimaryKey val id: Int? = null
 )
 
-class InvalidNoteException(message: String): Exception(message)
+class InvalidNoteException(message: String?): Exception(message)

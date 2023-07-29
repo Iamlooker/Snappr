@@ -1,7 +1,8 @@
 package com.looker.notesy.ui.add_edit_note
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -23,10 +24,6 @@ fun AddEditNoteScreen(
 	viewModel: AddEditViewModel = hiltViewModel(),
 	navigateUp: () -> Unit
 ) {
-	BackHandler {
-		viewModel.saveNote(navigateUp, showErrorSnackBar = false)
-	}
-
 	val errorMessage = viewModel.errorMessage
 	val snackbarHost = remember { SnackbarHostState() }
 	val focusRequester = remember { FocusRequester() }
@@ -46,12 +43,17 @@ fun AddEditNoteScreen(
 			.fillMaxSize()
 			.imePadding(),
 		snackbarHost = { SnackbarHost(hostState = snackbarHost) },
+		floatingActionButton = {
+			FloatingActionButton(onClick = {viewModel.saveNote(navigateUp)}) {
+				Icon(imageVector = Icons.Rounded.Save, contentDescription = null)
+			}
+		},
 		contentWindowInsets = WindowInsets.statusBars
 	) { paddingValues ->
 		Surface(tonalElevation = 8.dp) {
 			Column(Modifier.padding(paddingValues)) {
 				NavigationAppBar(
-					onBackPressed = { viewModel.saveNote(navigateUp, showErrorSnackBar = false) },
+					onBackPressed = { viewModel.saveNote(navigateUp) },
 					title = {
 						Text(
 							text = stringResource(R.string.label_edit_mode),

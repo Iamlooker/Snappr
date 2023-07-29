@@ -1,8 +1,6 @@
 package com.looker.notesy.ui.notes_detail
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -43,10 +41,10 @@ fun NotesDetailScreen(
 			}
 		}
 	) { paddingValues ->
-		Surface(tonalElevation = 8.dp) {
 			Column(
 				modifier = Modifier
 					.padding(paddingValues)
+					.verticalScroll(rememberScrollState())
 					.combinedClickable(
 						onDoubleClick = { onEditClicked(note.id!!) },
 						indication = null,
@@ -92,7 +90,12 @@ fun NotesDetailScreen(
 						clipboardManager.setText(AnnotatedString(url))
 					}
 				)
-			}
+				Spacer(
+					modifier = Modifier
+						.fillMaxWidth()
+						.height(72.dp)
+						.background(MaterialTheme.colorScheme.background)
+				)
 		}
 	}
 }
