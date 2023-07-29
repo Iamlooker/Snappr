@@ -22,7 +22,7 @@ class AddEditViewModel
 
 	private val inputNoteId = savedStateHandle.get<Int?>("noteId")?.takeIf { it != -1 }
 
-	private var isErrorAlreadyShown = false
+	private var isErrorAlreadyShown = 0
 
 	val isIdEditable = inputNoteId == null
 
@@ -85,12 +85,12 @@ class AddEditViewModel
 
 	private fun setError(msg: String? = null) {
 		errorMessage = msg ?: "Note not saved"
-		isErrorAlreadyShown = true
+		isErrorAlreadyShown++
 	}
 
 	private fun resetError() {
 		errorMessage = ""
-		isErrorAlreadyShown = false
+		isErrorAlreadyShown = 0
 	}
 
 	fun saveNote(onSuccess: () -> Unit) {
@@ -111,7 +111,7 @@ class AddEditViewModel
 			} catch (e: InvalidNoteException) {
 				setError(e.message)
 			} finally {
-				if (isErrorAlreadyShown) onSuccess()
+				if (isErrorAlreadyShown > 1) onSuccess()
 			}
 		}
 	}
