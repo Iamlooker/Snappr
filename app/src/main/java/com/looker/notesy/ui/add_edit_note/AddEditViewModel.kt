@@ -10,6 +10,8 @@ import com.looker.notesy.domain.model.InvalidNoteException
 import com.looker.notesy.domain.model.Note
 import com.looker.notesy.domain.use_case.NoteUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,10 +36,13 @@ class AddEditViewModel
 	init {
 		if (noteId != null) {
 			viewModelScope.launch {
-				noteUseCases.getNote(noteId)?.let { note ->
-					noteTitle = note.title
-					noteContent = note.content
-				}
+				noteUseCases
+					.getNote(noteId)
+					.filterNotNull()
+					.collectLatest { note ->
+						noteTitle = note.title
+						noteContent = note.content
+					}
 			}
 		}
 	}
@@ -62,9 +67,10 @@ class AddEditViewModel
 						id = noteId
 					)
 				)
-				onSuccess()
 			} catch (e: InvalidNoteException) {
 				if (showErrorSnackBar) errorMessage = e.message ?: "Note not saved"
+			} finally {
+				onSuccess()
 			}
 		}
 	}

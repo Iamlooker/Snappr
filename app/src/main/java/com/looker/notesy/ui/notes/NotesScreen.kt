@@ -2,16 +2,12 @@ package com.looker.notesy.ui.notes
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.*
 import androidx.compose.material3.TopAppBarDefaults.pinnedScrollBehavior
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -23,6 +19,7 @@ import com.looker.notesy.ui.notes.components.DeleteDialog
 import com.looker.notesy.ui.notes.components.NoteItem
 import com.looker.notesy.ui.notes.components.OrderChips
 import com.looker.notesy.ui.utils.LocalSpacing
+import com.looker.notesy.ui.utils.plus
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -83,16 +80,18 @@ fun NotesScreen(
 			}
 		}
 	) { paddingValue ->
-		LazyColumn(
-			contentPadding = paddingValue,
-			verticalArrangement = Arrangement.spacedBy(12.dp)
+		LazyVerticalStaggeredGrid(
+			modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp),
+			contentPadding = paddingValue + PaddingValues(bottom = 88.dp),
+			horizontalArrangement = Arrangement.spacedBy(8.dp),
+			verticalItemSpacing = 8.dp,
+			columns = StaggeredGridCells.Fixed(2)
 		) {
-			item {
+			item(span = StaggeredGridItemSpan.FullLine) {
 				OrderChips(noteOrder = state.noteOrder, onOrderChange = viewModel::reorderNotes)
 			}
 			items(
-				items = state.notesList,
-				key = { note -> note.id ?: -1 }
+				items = state.notesList
 			) { note ->
 				val dismissState = rememberDismissState(
 					confirmValueChange = {
@@ -106,9 +105,6 @@ fun NotesScreen(
 				NoteItem(
 					note = note,
 					state = dismissState,
-					modifier = Modifier
-						.padding(horizontal = LocalSpacing.current.border)
-						.animateItemPlacement(),
 					onNoteClick = { onNoteClick(note.id) }
 				)
 			}

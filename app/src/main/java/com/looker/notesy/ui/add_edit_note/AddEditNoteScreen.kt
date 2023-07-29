@@ -2,8 +2,6 @@ package com.looker.notesy.ui.add_edit_note
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.looker.notesy.R
 import com.looker.notesy.ui.add_edit_note.components.TransparentTextField
+import com.looker.notesy.ui.components.NavigationAppBar
 
 @Composable
 fun AddEditNoteScreen(
@@ -50,13 +49,17 @@ fun AddEditNoteScreen(
 	) { paddingValues ->
 		Surface(tonalElevation = 8.dp) {
 			Column(Modifier.padding(paddingValues)) {
-				IconButton(
-					onClick = {
+				NavigationAppBar(
+					onBackPressed = {
 						viewModel.saveNote(navigateUp, showErrorSnackBar = false)
+					},
+					title = {
+						Text(
+							text = stringResource(id = R.string.label_edit_mode),
+							color = MaterialTheme.colorScheme.outline
+						)
 					}
-				) {
-					Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
-				}
+				)
 				TransparentTextField(
 					modifier = Modifier.fillMaxWidth(),
 					text = viewModel.noteTitle,

@@ -15,6 +15,8 @@ import com.looker.notesy.ui.add_edit_note.navigation.addEditNoteScreen
 import com.looker.notesy.ui.add_edit_note.navigation.navigateToAddScreen
 import com.looker.notesy.ui.notes.navigation.NOTES_SCREEN_ROUTE
 import com.looker.notesy.ui.notes.navigation.notesScreen
+import com.looker.notesy.ui.notes_detail.components.navigateToDetailScreen
+import com.looker.notesy.ui.notes_detail.components.notesDetailScreen
 import com.looker.notesy.ui.theme.NotesyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,10 +45,15 @@ fun Notesy() {
 			startDestination = NOTES_SCREEN_ROUTE
 		) {
 			notesScreen(
-				onNoteClick = navController::navigateToAddScreen,
+				onNoteClick = navController::navigateToDetailScreen,
 				onCreateNew = navController::navigateToAddScreen
 			)
 			addEditNoteScreen(navController::popBackStack)
+			notesDetailScreen(
+				onBackPressed = navController::popBackStack,
+				onEditClicked = navController::navigateToAddScreen,
+				onNavigateToNote = navController::navigateToDetailScreen
+			)
 		}
 	}
 }

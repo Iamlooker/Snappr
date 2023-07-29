@@ -1,5 +1,6 @@
 package com.looker.notesy.ui.utils
 
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -16,7 +17,7 @@ import androidx.compose.ui.unit.sp
 
 // Regex containing the syntax tokens
 val symbolPattern by lazy {
-	Regex("""(https?://[^\s\t\n]+)|(`[^`]+`)|(@\w+)|(\*[\w]+\*)|(_[\w]+_)|(~[\w]+~)""")
+	Regex("""(https?://[^\s\t\n]+)|(`[^`]+`)|(@\w+)|(\*\w+\*)|(_\w+_)|(~\w+~)""")
 }
 
 enum class SymbolAnnotationType {
@@ -44,11 +45,10 @@ fun noteFormatter(text: String): AnnotatedString {
 				colorScheme = MaterialTheme.colorScheme,
 				codeSnippetBackground = codeSnippetBackground
 			)
-			append(annotatedString)
 
 			if (stringAnnotation != null) {
-				val (item, start, end, tag) = stringAnnotation
-				addStringAnnotation(tag = tag, start = start, end = end, annotation = item)
+				val (item, _, _, tag) = stringAnnotation
+				appendInlineContent(tag, item)
 			}
 
 			cursorPosition = token.range.last + 1

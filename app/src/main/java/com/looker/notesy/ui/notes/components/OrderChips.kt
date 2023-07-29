@@ -41,6 +41,9 @@ fun OrderChips(
 		OrderChip(text = "Date", isSelected = { noteOrder is NoteOrder.Date }) {
 			onOrderChange(NoteOrder.Date(noteOrder.orderType))
 		}
+		OrderChip(text = "Id", isSelected = { noteOrder is NoteOrder.Id }) {
+			onOrderChange(NoteOrder.Id(noteOrder.orderType))
+		}
 		Spacer(
 			modifier = Modifier
 				.height(FilterChipDefaults.Height - 4.dp)

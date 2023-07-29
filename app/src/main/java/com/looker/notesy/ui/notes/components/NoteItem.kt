@@ -1,5 +1,6 @@
 package com.looker.notesy.ui.notes.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -8,15 +9,19 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.looker.notesy.domain.model.Note
-import com.looker.notesy.ui.utils.noteFormatter
+import com.looker.notesy.ui.components.FormattedNoteContent
+import com.looker.notesy.ui.components.NoteId
 import com.looker.notesy.ui.theme.NotesyTheme
 import com.looker.notesy.ui.utils.LocalSpacing
+import com.looker.notesy.ui.utils.noteFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,9 +31,9 @@ fun NoteItem(
 	state: DismissState = rememberDismissState(),
 	onNoteClick: () -> Unit = {}
 ) {
-	ElevatedCard(
+	Surface(
 		modifier = modifier.fillMaxWidth(),
-		shape = MaterialTheme.shapes.extraLarge,
+		shape = MaterialTheme.shapes.large,
 		onClick = onNoteClick
 	) {
 		SwipeToDismiss(
@@ -56,27 +61,33 @@ fun NoteItem(
 			dismissContent = {
 				Surface(
 					modifier = Modifier.fillMaxWidth(),
-					color = MaterialTheme.colorScheme.surfaceVariant,
-					tonalElevation = 8.dp,
-					shape = MaterialTheme.shapes.extraLarge
+					border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+					shape = MaterialTheme.shapes.large
 				) {
 					Column(
 						modifier = Modifier.padding(LocalSpacing.current.border),
 						horizontalAlignment = Alignment.Start,
 						verticalArrangement = Arrangement.Center
 					) {
+						NoteId(
+							text = "# ${note.id}",
+							style = MaterialTheme.typography.labelMedium,
+							color = MaterialTheme.colorScheme.outline
+						)
+						Spacer(modifier = Modifier.height(LocalSpacing.current.text))
 						if (note.title.isNotBlank()) {
-							NoteText(
-								message = note.title,
-								style = MaterialTheme.typography.titleLarge
+							FormattedNoteContent(
+								rawText = note.title.trim(),
+								style = MaterialTheme.typography.titleMedium,
+								maxLines = 1
 							)
 						}
 						if (note.title.isNotBlank() && note.content.isNotBlank()) {
 							Spacer(modifier = Modifier.height(LocalSpacing.current.text))
 						}
 						if (note.content.isNotBlank()) {
-							NoteText(
-								message = note.content,
+							FormattedNoteContent(
+								rawText = note.content.trim(),
 								style = MaterialTheme.typography.bodyMedium,
 								maxLines = 8
 							)
@@ -86,23 +97,6 @@ fun NoteItem(
 			}
 		)
 	}
-}
-
-@Composable
-fun NoteText(
-	message: String,
-	style: TextStyle,
-	maxLines: Int = 1,
-	overflow: TextOverflow = TextOverflow.Ellipsis
-) {
-	val styleText = noteFormatter(text = message)
-
-	Text(
-		text = styleText,
-		maxLines = maxLines,
-		overflow = overflow,
-		style = style.copy(color = LocalContentColor.current)
-	)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
