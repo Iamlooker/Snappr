@@ -50,12 +50,10 @@ fun AddEditNoteScreen(
 		Surface(tonalElevation = 8.dp) {
 			Column(Modifier.padding(paddingValues)) {
 				NavigationAppBar(
-					onBackPressed = {
-						viewModel.saveNote(navigateUp, showErrorSnackBar = false)
-					},
+					onBackPressed = { viewModel.saveNote(navigateUp, showErrorSnackBar = false) },
 					title = {
 						Text(
-							text = stringResource(id = R.string.label_edit_mode),
+							text = stringResource(R.string.label_edit_mode),
 							color = MaterialTheme.colorScheme.outline
 						)
 					}

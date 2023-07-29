@@ -10,10 +10,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.looker.notesy.R
 import com.looker.notesy.ui.components.FormattedNoteContent
 import com.looker.notesy.ui.components.NavigationAppBar
 import com.looker.notesy.ui.components.NoteId
@@ -33,7 +35,7 @@ fun NotesDetailScreen(
 			ExtendedFloatingActionButton(onClick = { onEditClicked(note.id!!) }) {
 				Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)
 				Spacer(modifier = Modifier.width(LocalSpacing.current.text))
-				Text(text = "Edit")
+				Text(text = stringResource(R.string.action_edit))
 			}
 		}
 	) { paddingValues ->

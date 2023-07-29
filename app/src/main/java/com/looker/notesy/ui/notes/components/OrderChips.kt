@@ -14,9 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.looker.notesy.R
 import com.looker.notesy.domain.utils.NoteOrder
 import com.looker.notesy.domain.utils.OrderType
 import com.looker.notesy.ui.theme.NotesyTheme
@@ -35,13 +37,19 @@ fun OrderChips(
 		horizontalArrangement = Arrangement.spacedBy(4.dp),
 		verticalAlignment = Alignment.CenterVertically
 	) {
-		OrderChip(text = "Title", isSelected = { noteOrder is NoteOrder.Title }) {
+		OrderChip(
+			text = stringResource(R.string.label_order_title),
+			isSelected = { noteOrder is NoteOrder.Title }) {
 			onOrderChange(NoteOrder.Title(noteOrder.orderType))
 		}
-		OrderChip(text = "Date", isSelected = { noteOrder is NoteOrder.Date }) {
+		OrderChip(
+			text = stringResource(R.string.label_order_date),
+			isSelected = { noteOrder is NoteOrder.Date }) {
 			onOrderChange(NoteOrder.Date(noteOrder.orderType))
 		}
-		OrderChip(text = "Id", isSelected = { noteOrder is NoteOrder.Id }) {
+		OrderChip(
+			text = stringResource(R.string.label_order_id),
+			isSelected = { noteOrder is NoteOrder.Id }) {
 			onOrderChange(NoteOrder.Id(noteOrder.orderType))
 		}
 		Spacer(
@@ -51,14 +59,14 @@ fun OrderChips(
 				.background(MaterialTheme.colorScheme.outline)
 		)
 		OrderChip(
-			text = "Ascending",
+			text = stringResource(R.string.label_order_ascending),
 			isSelected = { noteOrder.orderType is OrderType.Ascending },
 			icon = Icons.Default.FilterList
 		) {
 			onOrderChange(noteOrder.setOrder(OrderType.Ascending))
 		}
 		OrderChip(
-			text = "Descending",
+			text = stringResource(R.string.label_order_descending),
 			isSelected = { noteOrder.orderType is OrderType.Descending },
 			icon = Icons.Default.Sort
 		) {
