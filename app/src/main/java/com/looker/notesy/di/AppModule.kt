@@ -3,7 +3,9 @@ package com.looker.notesy.di
 import android.app.Application
 import androidx.room.Room
 import com.looker.notesy.data.data_source.NotesyDatabase
+import com.looker.notesy.data.repository.BookmarkRepositoryImpl
 import com.looker.notesy.data.repository.NoteRepositoryImpl
+import com.looker.notesy.domain.repository.BookmarkRepository
 import com.looker.notesy.domain.repository.NoteRepository
 import com.looker.notesy.domain.use_case.*
 import dagger.Module
@@ -27,6 +29,10 @@ object AppModule {
 	@Provides
 	@Singleton
 	fun providesNoteRepository(db: NotesyDatabase): NoteRepository = NoteRepositoryImpl(db.noteDao)
+
+	@Provides
+	@Singleton
+	fun providesBookmarkRepository(db: NotesyDatabase): BookmarkRepository = BookmarkRepositoryImpl(db.bookmarkDao)
 
 	@Provides
 	@Singleton

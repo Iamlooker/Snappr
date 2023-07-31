@@ -1,8 +1,7 @@
-package com.looker.notesy.ui.notes_detail.components
+package com.looker.notesy.ui.notes_detail.navigation
 
 import androidx.navigation.*
 import androidx.navigation.compose.composable
-import com.looker.notesy.ui.add_edit_note.AddEditNoteScreen
 import com.looker.notesy.ui.notes_detail.NotesDetailScreen
 
 const val NOTES_DETAIL_SCREEN_ROUTE = "notes_detail_screen"

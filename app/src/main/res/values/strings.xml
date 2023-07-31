@@ -3,20 +3,24 @@
 
     <string name="action_restore">Restore</string>
     <string name="action_go_back">Go Back</string>
+    <string name="action_add">Add</string>
     <string name="action_add_note">Add Note</string>
+    <string name="action_add_bookmark">Add Bookmark</string>
     <string name="action_save">Save</string>
     <string name="action_edit">Edit</string>
 
     <string name="hint_title">Title</string>
     <string name="hint_content">Content</string>
 
-    <string name="label_undo_delete">Undo Delete</string>
-
+    <string name="label_bookmarks">Bookmarks</string>
     <string name="label_edit_mode">Edit Mode</string>
-    <string name="label_view_mode">View Mode</string>
     <string name="label_order_ascending">Ascending</string>
     <string name="label_order_descending">Descending</string>
     <string name="label_order_title">Title</string>
     <string name="label_order_date">Date</string>
     <string name="label_order_id">Id</string>
+    <string name="label_undo_delete">Undo Delete</string>
+    <string name="label_view_mode">View Mode</string>
+    <string name="label_last_modified">Last Modified:</string>
+    <string name="label_url_hint">https://…</string>
 </resources>

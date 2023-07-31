@@ -30,8 +30,6 @@ fun NotesScreen(
 ) {
 	val state by viewModel.noteState.collectAsStateWithLifecycle()
 	val deleteNoteConfirmation = state.showDeleteDialog
-	val topAppBarScrollBehavior = rememberTopAppBarState()
-	val scrollBehavior = pinnedScrollBehavior(topAppBarScrollBehavior)
 	val snackbarHost = remember { SnackbarHostState() }
 
 	LaunchedEffect(state.snackBarMessage) {
@@ -40,20 +38,7 @@ fun NotesScreen(
 	}
 
 	Scaffold(
-		modifier = Modifier
-			.fillMaxSize()
-			.nestedScroll(scrollBehavior.nestedScrollConnection),
-		topBar = {
-			CenterAlignedTopAppBar(
-				title = {
-					Text(
-						text = stringResource(R.string.app_name),
-						style = MaterialTheme.typography.headlineMedium
-					)
-				},
-				scrollBehavior = scrollBehavior
-			)
-		},
+		modifier = Modifier.fillMaxSize(),
 		floatingActionButton = {
 			ExtendedFloatingActionButton(
 				containerColor = MaterialTheme.colorScheme.tertiaryContainer,
@@ -78,7 +63,8 @@ fun NotesScreen(
 					Text(text = stringResource(R.string.label_undo_delete))
 				}
 			}
-		}
+		},
+		contentWindowInsets = WindowInsets(0)
 	) { paddingValue ->
 		LazyVerticalStaggeredGrid(
 			modifier = Modifier
