@@ -2,6 +2,7 @@ package com.looker.notesy.ui.theme
 
 import android.app.Activity
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -28,11 +29,11 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun NotesyTheme(
 	darkTheme: Boolean = isSystemInDarkTheme(),
-	dynamicColor: Boolean = true,
+	dynamicColor: Boolean = false,
 	content: @Composable () -> Unit
 ) {
 	val colorScheme = when {
-		dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+		dynamicColor && isDynamicThemeSupported() -> {
 			val context = LocalContext.current
 			if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
 		}
@@ -59,3 +60,7 @@ fun NotesyTheme(
 		)
 	}
 }
+
+@Composable
+@ChecksSdkIntAtLeast(31)
+fun isDynamicThemeSupported(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S

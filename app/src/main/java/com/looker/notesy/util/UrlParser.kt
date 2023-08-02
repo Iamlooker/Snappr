@@ -1,7 +1,6 @@
 package com.looker.notesy.util
 
 import android.content.Context
-import android.webkit.WebView
 import androidx.core.net.toUri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.HttpClient
