@@ -21,6 +21,8 @@ class BookmarkViewModel @Inject constructor(
 	private val urlParser: UrlParser
 ) : ViewModel() {
 
+	private var initialUrl: String? by mutableStateOf(null)
+
 	val bookmarks = repository
 		.getAllBookmarkStream()
 		.stateIn(
@@ -34,6 +36,14 @@ class BookmarkViewModel @Inject constructor(
 
 	var bookmarkUrl by mutableStateOf("")
 		private set
+
+	fun setPrimaryUrl(url: String?) {
+		initialUrl = url
+		if (url != null) {
+			showAddBookmarkDialog()
+			setUrl(url)
+		}
+	}
 
 	fun setUrl(url: String) {
 		bookmarkUrl = url

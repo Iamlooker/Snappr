@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.looker.notesy.domain.model.InvalidNoteException
 import com.looker.notesy.domain.model.Note
 import com.looker.notesy.domain.use_case.NoteUseCases
+import com.looker.notesy.ui.add_edit_note.navigation.NOTE_ID_ARG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.*
@@ -20,7 +21,7 @@ class AddEditViewModel
 	savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-	private val inputNoteId = savedStateHandle.get<Int?>("noteId")?.takeIf { it != -1 }
+	private val inputNoteId = savedStateHandle.get<Int?>(NOTE_ID_ARG)?.takeIf { it != -1 }
 
 	private var isErrorAlreadyShown = 0
 

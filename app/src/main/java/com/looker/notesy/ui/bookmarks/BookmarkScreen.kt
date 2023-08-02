@@ -3,7 +3,6 @@ package com.looker.notesy.ui.bookmarks
 import android.text.format.DateUtils
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
@@ -29,18 +27,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.looker.notesy.R
 import com.looker.notesy.domain.model.Bookmark
 import com.looker.notesy.ui.add_edit_note.components.TransparentTextField
-import com.looker.notesy.ui.components.NotesyImage
 import com.looker.notesy.ui.components.NotesyImageWithAmbience
 import com.looker.notesy.ui.theme.bottom
 import com.looker.notesy.ui.theme.top
 import com.looker.notesy.ui.utils.LocalSpacing
-import com.looker.notesy.ui.utils.bitmap
 import com.looker.notesy.ui.utils.calculateColorFromImageUrl
 
 @Composable
 fun BookmarkScreen(
-	viewModel: BookmarkViewModel = hiltViewModel()
+	viewModel: BookmarkViewModel = hiltViewModel(),
+	initial: String? = null
 ) {
+	LaunchedEffect(initial) {
+		viewModel.setPrimaryUrl(initial)
+	}
 	Scaffold(
 		floatingActionButtonPosition = FabPosition.Center,
 		floatingActionButton = {
