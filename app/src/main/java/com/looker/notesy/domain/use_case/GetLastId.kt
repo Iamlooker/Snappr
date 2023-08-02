@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.first
 
 class GetLastId(private val repository: NoteRepository) {
 	suspend operator fun invoke(): Int {
-		return repository.getLastNoteId().first() ?: 1
+		return repository.getLastNoteId().first() ?: 0
 	}
 }
