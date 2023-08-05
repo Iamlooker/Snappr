@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Notesy</string>
+    <string name="app_name">Snappr</string>
 
     <string name="action_restore">Restore</string>
     <string name="action_go_back">Go Back</string>

@@ -9,11 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.looker.notesy.domain.model.Note
@@ -21,7 +17,6 @@ import com.looker.notesy.ui.components.FormattedNoteContent
 import com.looker.notesy.ui.components.NoteId
 import com.looker.notesy.ui.theme.NotesyTheme
 import com.looker.notesy.ui.utils.LocalSpacing
-import com.looker.notesy.ui.utils.noteFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
