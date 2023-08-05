@@ -21,7 +21,7 @@ class GetNotes(private val repository: NoteRepository) {
 
 fun List<Note>.noteOrder(noteOrder: NoteOrder = NoteOrder.Date(OrderType.Descending)) =
 	when (noteOrder.orderType) {
-		is OrderType.Ascending -> {
+		OrderType.Ascending -> {
 			when (noteOrder) {
 				is NoteOrder.Title -> sortedBy { it.titleOrContent.lowercase() }
 				is NoteOrder.Date -> sortedBy { it.timeCreated }
@@ -29,7 +29,7 @@ fun List<Note>.noteOrder(noteOrder: NoteOrder = NoteOrder.Date(OrderType.Descend
 			}
 		}
 
-		is OrderType.Descending -> {
+		OrderType.Descending -> {
 			when (noteOrder) {
 				is NoteOrder.Title -> sortedByDescending { it.titleOrContent.lowercase() }
 				is NoteOrder.Date -> sortedByDescending { it.timeCreated }

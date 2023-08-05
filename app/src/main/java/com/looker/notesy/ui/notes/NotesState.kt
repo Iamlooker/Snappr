@@ -6,7 +6,7 @@ import com.looker.notesy.domain.utils.OrderType
 
 data class NotesState(
 	val notesList: List<Note> = listOf(),
-	val noteOrder: NoteOrder = NoteOrder.Date(OrderType.Descending),
+	val noteOrder: NoteOrder = NoteOrder.Id(OrderType.Descending),
 	val showDeleteDialog: Note? = null,
 	val snackBarMessage: String? = null
 )

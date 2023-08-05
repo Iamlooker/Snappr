@@ -2,11 +2,11 @@ package com.looker.notesy.ui.notes
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.looker.notesy.data.data_source.AppSettingsRepository
 import com.looker.notesy.domain.model.Note
 import com.looker.notesy.domain.use_case.NoteUseCases
 import com.looker.notesy.domain.use_case.noteOrder
 import com.looker.notesy.domain.utils.NoteOrder
-import com.looker.notesy.domain.utils.OrderType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -16,22 +16,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotesViewModel @Inject constructor(
-	private val noteUseCases: NoteUseCases
+	private val noteUseCases: NoteUseCases,
+	private val settings: AppSettingsRepository
 ) : ViewModel() {
 
-	private val sortOrder = MutableStateFlow<NoteOrder>(NoteOrder.Date(OrderType.Descending))
 	private val deleteConfirmation = MutableStateFlow<Note?>(null)
 	private val snackBarMessage = MutableStateFlow<String?>(null)
 
 	val noteState = combine(
 		noteUseCases.getNotes(),
-		sortOrder,
 		deleteConfirmation,
-		snackBarMessage
-	) { notes, sortOrder, deleteDialog, snackBarMessage ->
+		snackBarMessage,
+		settings.stream
+	) { notes, deleteDialog, snackBarMessage, settings ->
+		settings.noteOrder
 		NotesState(
-			notesList = notes.noteOrder(sortOrder),
-			noteOrder = sortOrder,
+			notesList = notes.noteOrder(settings.noteOrder),
+			noteOrder = settings.noteOrder,
 			showDeleteDialog = deleteDialog,
 			snackBarMessage = snackBarMessage
 		)
@@ -45,9 +46,7 @@ class NotesViewModel @Inject constructor(
 	private val deletedNoteLock: Mutex = Mutex()
 
 	fun showDeleteDialog(note: Note? = null) {
-		viewModelScope.launch {
-			deleteConfirmation.emit(note)
-		}
+		viewModelScope.launch { deleteConfirmation.emit(note) }
 	}
 
 	fun deleteNote(note: Note) {
@@ -67,7 +66,7 @@ class NotesViewModel @Inject constructor(
 	}
 
 	fun reorderNotes(order: NoteOrder) {
-		viewModelScope.launch { sortOrder.emit(order) }
+		viewModelScope.launch { settings.setNoteOrder(order) }
 	}
 
 	fun snackBarConsumed() {
