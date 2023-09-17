@@ -23,4 +23,6 @@
     <string name="label_view_mode">View Mode</string>
     <string name="label_last_modified">Last Modified:</string>
     <string name="label_url_hint">https://…</string>
+
+    <string name="label_note_empty">Note is empty, press again to go back</string>
 </resources>

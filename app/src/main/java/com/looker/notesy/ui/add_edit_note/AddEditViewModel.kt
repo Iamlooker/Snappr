@@ -1,9 +1,11 @@
 package com.looker.notesy.ui.add_edit_note
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.*
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.looker.notesy.R
 import com.looker.notesy.domain.model.InvalidNoteException
 import com.looker.notesy.domain.model.Note
 import com.looker.notesy.domain.use_case.NoteUseCases
@@ -36,7 +38,8 @@ class AddEditViewModel
 	var noteContent by mutableStateOf("")
 		private set
 
-	var errorMessage by mutableStateOf("")
+	@get:StringRes
+	var errorMessage by mutableStateOf<Int>(-1)
 		private set
 
 	val isIdValid = snapshotFlow { noteId }
@@ -84,13 +87,13 @@ class AddEditViewModel
 		resetError()
 	}
 
-	private fun setError(msg: String? = null) {
-		errorMessage = msg ?: "Note not saved"
+	private fun setError(msg: Int) {
+		errorMessage = msg
 		isErrorAlreadyShown++
 	}
 
 	private fun resetError() {
-		errorMessage = ""
+		errorMessage = -1
 		isErrorAlreadyShown = 0
 	}
 
@@ -98,7 +101,7 @@ class AddEditViewModel
 		viewModelScope.launch {
 			try {
 				val currentId = noteId.removePrefix("# ").toIntOrNull()
-				if (!isIdValid.value || currentId == null) throw InvalidNoteException(null)
+				if (!isIdValid.value || currentId == null) throw InvalidNoteException(R.string.label_note_empty)
 				noteUseCases.addNote(
 					Note(
 						title = noteTitle,
@@ -110,7 +113,7 @@ class AddEditViewModel
 				)
 				onSuccess()
 			} catch (e: InvalidNoteException) {
-				setError(e.message)
+				setError(e.errorId)
 			} finally {
 				if (isErrorAlreadyShown > 1) onSuccess()
 			}

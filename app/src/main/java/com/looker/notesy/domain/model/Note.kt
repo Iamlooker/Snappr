@@ -1,5 +1,6 @@
 package com.looker.notesy.domain.model
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -15,4 +16,4 @@ data class Note(
 	@PrimaryKey val id: Int? = null
 )
 
-class InvalidNoteException(message: String?): Exception(message)
+class InvalidNoteException(@StringRes val errorId: Int, message: String? = null): Exception(message)
