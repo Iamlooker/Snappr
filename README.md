@@ -30,3 +30,7 @@ When you add a web link to your notes, Snappr provides a convenient **preview** 
 ### 6. Slick and Minimal Design
 
 Snappr boasts a sleek and **minimalistic design** that ensures a clutter-free and distraction-free note-taking environment. The interface is thoughtfully designed to keep you focused on your content.
+
+## License
+
+Snappr is open-source software licensed under the [**MIT License**](LICENSE). You are free to use, modify, and distribute Snappr as per the terms of this license.
