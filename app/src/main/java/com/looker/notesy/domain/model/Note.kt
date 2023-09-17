@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.looker.notesy.ui.theme.*
 
 @Entity
 @Stable
