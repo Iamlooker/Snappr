@@ -46,6 +46,10 @@ fun noteFormatter(text: String): AnnotatedString {
 				codeSnippetBackground = codeSnippetBackground
 			)
 
+			if (!annotatedString.haveCustomItem) {
+				append(annotatedString)
+			}
+
 			if (stringAnnotation != null) {
 				val (item, _, _, tag) = stringAnnotation
 				appendInlineContent(tag, item)
@@ -112,7 +116,7 @@ private fun getSymbolAnnotation(
 		)
 		'`' -> SymbolAnnotation(
 			AnnotatedString(
-				text = matchResult.value.replace('`', ' '),
+				text = matchResult.value.trim('`'),
 				spanStyle = SpanStyle(
 					fontFamily = FontFamily.Monospace,
 					fontSize = 12.sp,
@@ -139,3 +143,6 @@ private fun getSymbolAnnotation(
 		else -> SymbolAnnotation(AnnotatedString(matchResult.value), null)
 	}
 }
+
+val AnnotatedString.haveCustomItem: Boolean
+	get() = startsWith('@') || startsWith('h')
