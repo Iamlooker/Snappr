@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ fun FormattedNoteContent(
 	rawText: String,
 	modifier: Modifier = Modifier,
 	style: TextStyle = LocalTextStyle.current,
+	fontWeight: FontWeight? = null,
 	color: Color = LocalContentColor.current,
 	maxLines: Int = Int.MAX_VALUE,
 	overflow: TextOverflow = TextOverflow.Ellipsis,
@@ -39,6 +41,7 @@ fun FormattedNoteContent(
 			modifier = modifier,
 			color = color,
 			style = style,
+			fontWeight = fontWeight,
 			maxLines = maxLines,
 			overflow = overflow,
 			textDecoration = textDecoration,
