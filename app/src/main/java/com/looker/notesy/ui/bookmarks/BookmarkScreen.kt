@@ -238,7 +238,7 @@ fun AddBookmarkDialog(
 			containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
 		)
 		Spacer(modifier = Modifier.height(4.dp))
-		ElevatedButton(
+		FilledTonalButton(
 			modifier = Modifier
 				.padding(horizontal = 24.dp)
 				.fillMaxWidth(),
