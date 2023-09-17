@@ -30,31 +30,18 @@ class UrlParser @Inject constructor(
 	}
 
 	suspend fun getFavIcon(url: String): String = withContext(Dispatchers.IO){
-		val domainName = url.domain.favIconApi()
+		val domainName = url.favIcon()
 		val fileName = System.currentTimeMillis().toString() + ".png"
 		val newFile = File(imagesDirectory, fileName)
 		domainName.downloadToFile(newFile)
 		newFile.path ?: ""
 	}
 
-	private val String.domain: String
-		get() {
-			val uri = toUri()
-			val domain = uri.host
-				?.removePrefix("https://")
-				?.removePrefix("https://")
-				?.removePrefix("www.")
-			return domain ?: this
-		}
-
 	private suspend fun String.downloadToFile(file: File) {
 		val response = client.get(this)
 		val body = response.body<ByteArray>()
 		file.writeBytes(body)
 	}
-
-	private fun String.favIconApi(size: Int = 128): String =
-		"https://www.google.com/s2/favicons?domain=${this}&sz=${size}"
 
 	private val imagesDirectory: File
 		get() = File(
@@ -63,3 +50,18 @@ class UrlParser @Inject constructor(
 		).apply { isDirectory || mkdirs() || throw RuntimeException() }
 
 }
+
+fun String.favIcon(size: Int = 128): String = domain.favIconApi()
+
+private val String.domain: String
+	get() {
+		val uri = toUri()
+		val domain = uri.host
+			?.removePrefix("https://")
+			?.removePrefix("https://")
+			?.removePrefix("www.")
+		return domain ?: this
+	}
+
+private fun String.favIconApi(size: Int = 128): String =
+	"https://www.google.com/s2/favicons?domain=${this}&sz=${size}"

@@ -32,6 +32,7 @@ import com.looker.notesy.ui.theme.bottom
 import com.looker.notesy.ui.theme.top
 import com.looker.notesy.ui.utils.LocalSpacing
 import com.looker.notesy.ui.utils.calculateColorFromImageUrl
+import com.looker.notesy.util.favIcon
 
 @Composable
 fun BookmarkScreen(
@@ -113,10 +114,13 @@ fun BookmarkItem(
 			modifier = Modifier.padding(horizontal = LocalSpacing.current.border),
 			verticalAlignment = Alignment.CenterVertically
 		) {
+			val artwork = remember(bookmark.artwork) {
+				bookmark.artwork.ifBlank { bookmark.url.favIcon() }
+			}
 			NotesyImageWithAmbience(
 				modifier = Modifier.size(48.dp),
 				imageModifier = Modifier.clip(CircleShape),
-				data = bookmark.artwork
+				data = artwork
 			)
 			Column {
 				Spacer(modifier = Modifier.height(8.dp))
