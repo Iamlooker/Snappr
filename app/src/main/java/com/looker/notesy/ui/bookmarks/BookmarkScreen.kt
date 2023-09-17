@@ -3,6 +3,7 @@ package com.looker.notesy.ui.bookmarks
 import android.text.format.DateUtils
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.BookmarkAdd
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,12 +30,14 @@ import com.looker.notesy.R
 import com.looker.notesy.domain.model.Bookmark
 import com.looker.notesy.ui.add_edit_note.components.TransparentTextField
 import com.looker.notesy.ui.components.NotesyImageWithAmbience
+import com.looker.notesy.ui.notes.components.DeleteDialog
 import com.looker.notesy.ui.theme.bottom
 import com.looker.notesy.ui.theme.top
 import com.looker.notesy.ui.utils.LocalSpacing
 import com.looker.notesy.ui.utils.calculateColorFromImageUrl
 import com.looker.notesy.util.favIcon
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookmarkScreen(
 	viewModel: BookmarkViewModel = hiltViewModel(),
@@ -69,19 +73,38 @@ fun BookmarkScreen(
 			contentPadding = paddingValues,
 			verticalArrangement = Arrangement.spacedBy(12.dp)
 		) {
-			items(bookmarks) {
+			items(bookmarks) { bookmark ->
+				val dismissState = rememberDismissState(
+					confirmValueChange = {
+						if (it != DismissValue.Default) viewModel.showDeleteDialog(bookmark)
+						true
+					}
+				)
+				LaunchedEffect(viewModel.deletedBookmark) {
+					if (viewModel.deletedBookmark != null) dismissState.reset()
+				}
 				BookmarkItem(
-					bookmark = it,
+					bookmark = bookmark,
+					dismissState = dismissState,
 					modifier = Modifier.padding(horizontal = LocalSpacing.current.border)
 				)
 			}
 		}
+		if (viewModel.deletedBookmark != null) {
+			DeleteDialog(
+				name = viewModel.deletedBookmark!!.name,
+				onConfirm = viewModel::confirmDelete,
+				onDismiss = viewModel::showDeleteDialog
+			)
+		}
 	}
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookmarkItem(
 	bookmark: Bookmark,
+	dismissState: DismissState,
 	modifier: Modifier = Modifier,
 	defaultOutlineGradientColor: Color = MaterialTheme.colorScheme.outlineVariant
 ) {
@@ -100,58 +123,87 @@ fun BookmarkItem(
 	Surface(
 		modifier = modifier.fillMaxWidth(),
 		shape = MaterialTheme.shapes.large,
-		border = BorderStroke(
-			width = 1.5.dp,
-			brush = Brush.horizontalGradient(
-				0f to gradientColor,
-				0.2f to defaultOutlineGradientColor,
-				1f to defaultOutlineGradientColor
-			)
-		),
 		onClick = { uriHandler.openUri(bookmark.url) }
 	) {
-		Row(
-			modifier = Modifier.padding(horizontal = LocalSpacing.current.border),
-			verticalAlignment = Alignment.CenterVertically
-		) {
-			val artwork = remember(bookmark.artwork) {
-				bookmark.artwork.ifBlank { bookmark.url.favIcon() }
-			}
-			NotesyImageWithAmbience(
-				modifier = Modifier.size(48.dp),
-				imageModifier = Modifier.clip(CircleShape),
-				data = artwork
-			)
-			Column {
-				Spacer(modifier = Modifier.height(8.dp))
-				Text(
-					modifier = Modifier.padding(horizontal = LocalSpacing.current.border),
-					text = bookmark.name,
-					style = MaterialTheme.typography.titleMedium,
-					fontWeight = FontWeight.SemiBold,
-					maxLines = 3
-				)
-				Spacer(modifier = Modifier.height(4.dp))
-				Text(
-					modifier = Modifier.padding(horizontal = LocalSpacing.current.border),
-					text = bookmark.url,
-					style = MaterialTheme.typography.labelMedium,
-					color = MaterialTheme.colorScheme.outline,
-					maxLines = 1
-				)
-				Spacer(modifier = Modifier.height(12.dp))
-				val bookmarkTimestamp = remember(bookmark.lastModified) {
-					bookmark.lastModified.relativeTimePassedString()
+		SwipeToDismiss(
+			state = dismissState,
+			background = {
+				val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
+				val alignment by remember(direction) {
+					derivedStateOf {
+						when (direction) {
+							DismissDirection.StartToEnd -> Alignment.CenterStart
+							DismissDirection.EndToStart -> Alignment.CenterEnd
+						}
+					}
 				}
-				Text(
-					modifier = Modifier.padding(horizontal = LocalSpacing.current.border),
-					text = stringResource(R.string.label_last_modified) + " " + bookmarkTimestamp,
-					style = MaterialTheme.typography.labelMedium,
-					color = MaterialTheme.colorScheme.outline
-				)
-				Spacer(modifier = Modifier.height(8.dp))
+				Box(
+					modifier = Modifier
+						.fillMaxSize()
+						.background(MaterialTheme.colorScheme.errorContainer)
+						.absolutePadding(left = 10.dp, right = 10.dp),
+					contentAlignment = alignment
+				) {
+					Icon(imageVector = Icons.Rounded.Delete, contentDescription = null)
+				}
+			}, dismissContent = {
+				Surface(
+					modifier = Modifier.fillMaxWidth(),
+					shape = MaterialTheme.shapes.large,
+					border = BorderStroke(
+						width = 1.5.dp,
+						brush = Brush.horizontalGradient(
+							0f to gradientColor,
+							0.2f to defaultOutlineGradientColor,
+							1f to defaultOutlineGradientColor
+						)
+					)
+				) {
+					Row(
+						modifier = Modifier.padding(horizontal = LocalSpacing.current.border),
+						verticalAlignment = Alignment.CenterVertically
+					) {
+						val artwork = remember(bookmark.artwork) {
+							bookmark.artwork.ifBlank { bookmark.url.favIcon() }
+						}
+						NotesyImageWithAmbience(
+							modifier = Modifier.size(48.dp),
+							imageModifier = Modifier.clip(CircleShape),
+							data = artwork
+						)
+						Column {
+							Spacer(modifier = Modifier.height(8.dp))
+							Text(
+								modifier = Modifier.padding(horizontal = LocalSpacing.current.border),
+								text = bookmark.name,
+								style = MaterialTheme.typography.titleMedium,
+								fontWeight = FontWeight.SemiBold,
+								maxLines = 3
+							)
+							Spacer(modifier = Modifier.height(4.dp))
+							Text(
+								modifier = Modifier.padding(horizontal = LocalSpacing.current.border),
+								text = bookmark.url,
+								style = MaterialTheme.typography.labelMedium,
+								color = MaterialTheme.colorScheme.outline,
+								maxLines = 1
+							)
+							Spacer(modifier = Modifier.height(12.dp))
+							val bookmarkTimestamp = remember(bookmark.lastModified) {
+								bookmark.lastModified.relativeTimePassedString()
+							}
+							Text(
+								modifier = Modifier.padding(horizontal = LocalSpacing.current.border),
+								text = stringResource(R.string.label_last_modified) + " " + bookmarkTimestamp,
+								style = MaterialTheme.typography.labelMedium,
+								color = MaterialTheme.colorScheme.outline
+							)
+							Spacer(modifier = Modifier.height(8.dp))
+						}
+					}
+				}
 			}
-		}
+		)
 	}
 }
 

@@ -34,6 +34,9 @@ class BookmarkViewModel @Inject constructor(
 	var isAddBookmarkDialogOpen by mutableStateOf(false)
 		private set
 
+	var deletedBookmark by mutableStateOf<Bookmark?>(null)
+		private set
+
 	var bookmarkUrl by mutableStateOf("")
 		private set
 
@@ -62,6 +65,19 @@ class BookmarkViewModel @Inject constructor(
 						lastModified = System.currentTimeMillis()
 					)
 				)
+			}
+		}
+	}
+
+	fun showDeleteDialog(bookmark: Bookmark? = null) {
+		deletedBookmark = bookmark
+	}
+
+	fun confirmDelete() {
+		viewModelScope.launch {
+			if (deletedBookmark != null) {
+				repository.deleteBookmark(deletedBookmark!!)
+				showDeleteDialog()
 			}
 		}
 	}

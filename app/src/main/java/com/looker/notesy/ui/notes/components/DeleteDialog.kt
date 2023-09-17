@@ -4,11 +4,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.looker.notesy.R
 import com.looker.notesy.domain.model.Note
 
 @Composable
 fun DeleteDialog(
-	note: Note,
+	name: String,
 	onConfirm: () -> Unit = {},
 	onDismiss: () -> Unit
 ) {
@@ -22,12 +24,12 @@ fun DeleteDialog(
 					contentColor = MaterialTheme.colorScheme.onErrorContainer
 				)
 			) {
-				Text(text = "Delete")
+				Text(text = stringResource(R.string.action_delete))
 			}
 		},
 		dismissButton = {
 			TextButton(onClick = onDismiss) {
-				Text(text = "Cancel")
+				Text(text = stringResource(R.string.action_cancel))
 			}
 		},
 		icon = {
@@ -35,12 +37,12 @@ fun DeleteDialog(
 		},
 		title = {
 			Text(
-				text = "Delete Note: ${note.title}",
+				text = stringResource(R.string.label_delete_heading, name),
 				style = MaterialTheme.typography.titleLarge
 			)
 		},
 		text = {
-			Text(text = "Are you sure, you want to delete this note?")
+			Text(text = stringResource(R.string.label_delete_confirmation))
 		}
 	)
 }

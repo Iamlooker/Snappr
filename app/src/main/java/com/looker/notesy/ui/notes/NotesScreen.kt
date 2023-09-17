@@ -19,7 +19,7 @@ import com.looker.notesy.ui.notes.components.OrderChips
 import com.looker.notesy.ui.utils.LocalSpacing
 import com.looker.notesy.ui.utils.plus
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesScreen(
 	viewModel: NotesViewModel = hiltViewModel(),
@@ -97,7 +97,7 @@ fun NotesScreen(
 		}
 		if (deleteNoteConfirmation != null) {
 			DeleteDialog(
-				note = deleteNoteConfirmation,
+				name = deleteNoteConfirmation.title,
 				onConfirm = { viewModel.deleteNote(deleteNoteConfirmation) },
 				onDismiss = viewModel::showDeleteDialog
 			)

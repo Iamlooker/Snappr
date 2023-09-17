@@ -8,6 +8,8 @@
     <string name="action_add_bookmark">Add Bookmark</string>
     <string name="action_save">Save</string>
     <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_cancel">Cancel</string>
 
     <string name="hint_title">Title</string>
     <string name="hint_content">Content</string>
@@ -23,6 +25,9 @@
     <string name="label_view_mode">View Mode</string>
     <string name="label_last_modified">Last Modified:</string>
     <string name="label_url_hint">https://…</string>
+
+    <string name="label_delete_heading">Delete: %s</string>
+    <string name="label_delete_confirmation">Are you sure, you want to delete this note?</string>
 
     <string name="label_note_empty">Note is empty, press again to go back</string>
 </resources>
