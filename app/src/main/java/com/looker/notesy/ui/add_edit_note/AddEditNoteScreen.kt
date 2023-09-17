@@ -44,7 +44,10 @@ fun AddEditNoteScreen(
 			.imePadding(),
 		snackbarHost = { SnackbarHost(hostState = snackbarHost) },
 		floatingActionButton = {
-			FloatingActionButton(onClick = {viewModel.saveNote(navigateUp)}) {
+			FloatingActionButton(
+				modifier = Modifier.padding(bottom = 8.dp),
+				onClick = { viewModel.saveNote(navigateUp) }
+			) {
 				Icon(imageVector = Icons.Rounded.Save, contentDescription = null)
 			}
 		},

@@ -1,6 +1,7 @@
 package com.looker.notesy.ui.theme
 
 import android.app.Activity
+import android.graphics.Color.toArgb
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -8,8 +9,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.looker.notesy.ui.utils.LocalSpacing
 import com.looker.notesy.ui.utils.Spacing
@@ -33,6 +37,8 @@ fun NotesyTheme(
 	if (!view.isInEditMode) {
 		SideEffect {
 			val window = (view.context as Activity).window
+			window.statusBarColor = Color.Transparent.toArgb()
+			window.navigationBarColor = colorScheme.surfaceColorAtElevation(3.dp).toArgb()
 			with(WindowCompat.getInsetsController(window, view)) {
 				isAppearanceLightStatusBars = !darkTheme
 				isAppearanceLightNavigationBars = !darkTheme
