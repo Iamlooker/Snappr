@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.looker.notesy.ui.components.NotesyTopAppBar
 import com.looker.notesy.ui.navigation.NotesyNavHost
@@ -23,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		WindowCompat.setDecorFitsSystemWindows(window, false)
+		installSplashScreen()
 		super.onCreate(savedInstanceState)
 		setContent {
 			NotesyTheme {
