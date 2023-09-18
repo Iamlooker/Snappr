@@ -68,7 +68,7 @@ fun NotesScreen(
 			modifier = Modifier
 				.fillMaxSize()
 				.padding(horizontal = 8.dp),
-			contentPadding = paddingValue + PaddingValues(bottom = 88.dp),
+			contentPadding = paddingValue + PaddingValues(bottom = 84.dp),
 			horizontalArrangement = Arrangement.spacedBy(8.dp),
 			verticalItemSpacing = 8.dp,
 			columns = StaggeredGridCells.Fixed(2)

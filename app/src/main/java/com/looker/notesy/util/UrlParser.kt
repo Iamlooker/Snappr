@@ -7,8 +7,10 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.request.get
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import java.io.File
 import javax.inject.Inject
 
@@ -29,7 +31,7 @@ class UrlParser @Inject constructor(
 		}
 	}
 
-	suspend fun getFavIcon(url: String): String = withContext(Dispatchers.IO){
+	suspend fun getFavIcon(url: String): String = withContext(Dispatchers.IO) {
 		val domainName = url.favIcon()
 		val fileName = System.currentTimeMillis().toString() + ".png"
 		val newFile = File(imagesDirectory, fileName)
@@ -52,6 +54,30 @@ class UrlParser @Inject constructor(
 }
 
 fun String.favIcon(size: Int = 128): String = domain.favIconApi()
+
+fun String.previewImage(): String {
+	try {
+		val document: Document = Jsoup.connect(this).get()
+		val metaTags = document.select("meta")
+
+		for (meta in metaTags) {
+			val property = meta.attr("property")
+			val content = meta.attr("content")
+
+			if (property == "og:image") {
+				// Open Graph image property
+				return content
+			} else if (property == "twitter:image") {
+				// Twitter image property
+				return content
+			}
+		}
+		return ""
+	} catch (e: Exception) {
+		e.printStackTrace()
+		return ""
+	}
+}
 
 private val String.domain: String
 	get() {

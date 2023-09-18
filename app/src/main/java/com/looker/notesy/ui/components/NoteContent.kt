@@ -23,6 +23,7 @@ import com.looker.notesy.ui.utils.noteFormatter
 fun FormattedNoteContent(
 	rawText: String,
 	modifier: Modifier = Modifier,
+	enableSelection: Boolean = true,
 	style: TextStyle = LocalTextStyle.current,
 	fontWeight: FontWeight? = null,
 	color: Color = LocalContentColor.current,
@@ -35,7 +36,21 @@ fun FormattedNoteContent(
 ) {
 	val styleText = noteFormatter(text = rawText)
 
-	SelectionContainer {
+	if (enableSelection) {
+		SelectionContainer {
+			Text(
+				text = styleText,
+				modifier = modifier,
+				color = color,
+				style = style,
+				fontWeight = fontWeight,
+				maxLines = maxLines,
+				overflow = overflow,
+				textDecoration = textDecoration,
+				inlineContent = noteInlineContent(onNavigateToNote, onLinkClick, onLinkLongClick)
+			)
+		}
+	} else {
 		Text(
 			text = styleText,
 			modifier = modifier,
@@ -48,6 +63,7 @@ fun FormattedNoteContent(
 			inlineContent = noteInlineContent(onNavigateToNote, onLinkClick, onLinkLongClick)
 		)
 	}
+
 }
 
 private fun noteInlineContent(
