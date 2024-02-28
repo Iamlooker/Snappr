@@ -8,6 +8,7 @@ import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalUriHandler
@@ -49,7 +50,7 @@ fun NotesDetailScreen(
 					.combinedClickable(
 						onDoubleClick = { onEditClicked(note.id!!) },
 						indication = null,
-						interactionSource = MutableInteractionSource(),
+						interactionSource = remember { MutableInteractionSource() },
 						onClick = {}
 					)
 			) {

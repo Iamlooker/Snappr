@@ -107,7 +107,6 @@ class AddEditViewModel
 						title = noteTitle,
 						content = noteContent,
 						timeCreated = System.currentTimeMillis(),
-						color = 0,
 						id = currentId
 					)
 				)

@@ -48,14 +48,14 @@ fun AddEditNoteScreen(
 		floatingActionButton = {
 			FloatingActionButton(
 				modifier = Modifier.padding(bottom = 8.dp),
-				onClick = { viewModel.saveNote(navigateUp) }
+				onClick = { viewModel.saveNote(navigateUp) },
 			) {
 				Icon(imageVector = Icons.Rounded.Save, contentDescription = null)
 			}
 		},
 		contentWindowInsets = WindowInsets.statusBars
 	) { paddingValues ->
-		Surface(tonalElevation = 8.dp) {
+		Surface(color = MaterialTheme.colorScheme.surfaceContainer) {
 			Column(Modifier.padding(paddingValues)) {
 				NavigationAppBar(
 					onBackPressed = { viewModel.saveNote(navigateUp) },

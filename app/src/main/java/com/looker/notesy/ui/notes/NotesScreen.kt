@@ -79,9 +79,9 @@ fun NotesScreen(
 			items(
 				items = state.notesList
 			) { note ->
-				val dismissState = rememberDismissState(
+				val dismissState = rememberSwipeToDismissBoxState(
 					confirmValueChange = {
-						if (it != DismissValue.Default) viewModel.showDeleteDialog(note)
+						if (it != SwipeToDismissBoxValue.Settled) viewModel.showDeleteDialog(note)
 						true
 					}
 				)

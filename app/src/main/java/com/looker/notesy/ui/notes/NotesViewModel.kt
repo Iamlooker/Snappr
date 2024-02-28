@@ -1,5 +1,6 @@
 package com.looker.notesy.ui.notes
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.notesy.data.data_source.AppSettingsRepository
@@ -29,7 +30,7 @@ class NotesViewModel @Inject constructor(
 		snackBarMessage,
 		settings.stream
 	) { notes, deleteDialog, snackBarMessage, settings ->
-		settings.noteOrder
+		Log.e("tag", notes.toString())
 		NotesState(
 			notesList = notes.noteOrder(settings.noteOrder),
 			noteOrder = settings.noteOrder,

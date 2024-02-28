@@ -18,29 +18,31 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-	@Provides
-	@Singleton
-	fun provideNoteDatabase(app: Application): NotesyDatabase = Room.databaseBuilder(
-		app,
-		NotesyDatabase::class.java,
-		NotesyDatabase.DATABASE
-	).build()
+    @Provides
+    @Singleton
+    fun provideNoteDatabase(app: Application): NotesyDatabase = Room.databaseBuilder(
+        app,
+        NotesyDatabase::class.java,
+        NotesyDatabase.DATABASE
+    ).createFromAsset("notes.db")
+        .build()
 
-	@Provides
-	@Singleton
-	fun providesNoteRepository(db: NotesyDatabase): NoteRepository = NoteRepositoryImpl(db.noteDao)
+    @Provides
+    @Singleton
+    fun providesNoteRepository(db: NotesyDatabase): NoteRepository = NoteRepositoryImpl(db.noteDao)
 
-	@Provides
-	@Singleton
-	fun providesBookmarkRepository(db: NotesyDatabase): BookmarkRepository = BookmarkRepositoryImpl(db.bookmarkDao)
+    @Provides
+    @Singleton
+    fun providesBookmarkRepository(db: NotesyDatabase): BookmarkRepository =
+        BookmarkRepositoryImpl(db.bookmarkDao)
 
-	@Provides
-	@Singleton
-	fun provideNoteUseCases(repository: NoteRepository) = NoteUseCases(
-		getNotes = GetNotes(repository),
-		deleteNote = DeleteNote(repository),
-		addNote = AddNote(repository),
-		getNote = GetNote(repository),
-		getLastId = GetLastId(repository)
-	)
+    @Provides
+    @Singleton
+    fun provideNoteUseCases(repository: NoteRepository) = NoteUseCases(
+        getNotes = GetNotes(repository),
+        deleteNote = DeleteNote(repository),
+        addNote = AddNote(repository),
+        getNote = GetNote(repository),
+        getLastId = GetLastId(repository)
+    )
 }

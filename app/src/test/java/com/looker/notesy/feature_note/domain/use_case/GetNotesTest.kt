@@ -39,7 +39,7 @@ class GetNotesTest {
 
 	@Test
 	fun `Order notes by title ascending, correct order`() = runBlocking {
-		val notes = getNotes(NoteOrder.Title(OrderType.Ascending)).first()
+		val notes = getNotes().first()
 
 		for (i in 0..notes.size - 2) {
 			assertThat(notes[i].title).isLessThan(notes[i + 1].title)

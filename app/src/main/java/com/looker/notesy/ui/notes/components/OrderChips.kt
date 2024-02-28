@@ -85,7 +85,7 @@ fun OrderChip(
 	icon: ImageVector? = null,
 	onClick: () -> Unit
 ) {
-	ElevatedFilterChip(
+	FilterChip(
 		modifier = modifier,
 		selected = isSelected(),
 		onClick = onClick,

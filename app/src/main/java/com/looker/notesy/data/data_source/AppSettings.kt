@@ -40,7 +40,7 @@ class AppSettingsRepository(
 	}
 
 	private fun mapSettings(preferences: Preferences): AppSettings {
-		val orderType = OrderType.valueOf(preferences[Keys.ORDER_TYPE] ?: OrderType.Descending.name)
+		val orderType = OrderType.valueOf(preferences[Keys.ORDER_TYPE] ?: OrderType.Ascending.name)
 		val noteOrder = preferences[Keys.NOTE_ORDER] ?: 2
 		return AppSettings(
 			order = orderType,
