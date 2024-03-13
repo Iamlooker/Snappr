@@ -17,11 +17,11 @@ import androidx.compose.ui.unit.sp
 
 // Regex containing the syntax tokens
 val symbolPattern by lazy {
-	Regex("""(https?://[^\s\t\n]+)|(`[^`]+`)|(@\w+)|(\*\w+\*)|(_\w+_)|(~\w+~)""")
+    Regex("""(https?://[^\s\t\n]+)|(`[^`]+`)|(@\w+)|(\*\w+\*)|(_\w+_)|(~\w+~)""")
 }
 
 enum class SymbolAnnotationType {
-	NOTE, LINK
+    NOTE, LINK
 }
 typealias StringAnnotation = AnnotatedString.Range<String>
 // Pair returning styled content and annotation for ClickableText when matching syntax token
@@ -29,41 +29,41 @@ typealias SymbolAnnotation = Pair<AnnotatedString, StringAnnotation?>
 
 @Composable
 fun noteFormatter(text: String): AnnotatedString {
-	val tokens = symbolPattern.findAll(text)
+    val tokens = symbolPattern.findAll(text)
 
-	return buildAnnotatedString {
+    return buildAnnotatedString {
 
-		var cursorPosition = 0
+        var cursorPosition = 0
 
-		val codeSnippetBackground = MaterialTheme.colorScheme.surface
+        val codeSnippetBackground = MaterialTheme.colorScheme.surface
 
-		for (token in tokens) {
-			append(text.slice(cursorPosition until token.range.first))
+        for (token in tokens) {
+            append(text.slice(cursorPosition until token.range.first))
 
-			val (annotatedString, stringAnnotation) = getSymbolAnnotation(
-				matchResult = token,
-				colorScheme = MaterialTheme.colorScheme,
-				codeSnippetBackground = codeSnippetBackground
-			)
+            val (annotatedString, stringAnnotation) = getSymbolAnnotation(
+                matchResult = token,
+                colorScheme = MaterialTheme.colorScheme,
+                codeSnippetBackground = codeSnippetBackground
+            )
 
-			if (!annotatedString.haveCustomItem) {
-				append(annotatedString)
-			}
+            if (!annotatedString.haveCustomItem) {
+                append(annotatedString)
+            }
 
-			if (stringAnnotation != null) {
-				val (item, _, _, tag) = stringAnnotation
-				appendInlineContent(tag, item)
-			}
+            if (stringAnnotation != null) {
+                val (item, _, _, tag) = stringAnnotation
+                appendInlineContent(tag, item)
+            }
 
-			cursorPosition = token.range.last + 1
-		}
+            cursorPosition = token.range.last + 1
+        }
 
-		if (!tokens.none()) {
-			append(text.slice(cursorPosition..text.lastIndex))
-		} else {
-			append(text)
-		}
-	}
+        if (!tokens.none()) {
+            append(text.slice(cursorPosition..text.lastIndex))
+        } else {
+            append(text)
+        }
+    }
 }
 
 /**
@@ -73,76 +73,82 @@ fun noteFormatter(text: String): AnnotatedString {
  * @return pair of AnnotatedString with annotation (optional) used inside the ClickableText wrapper
  */
 private fun getSymbolAnnotation(
-	matchResult: MatchResult,
-	colorScheme: ColorScheme,
-	codeSnippetBackground: Color
+    matchResult: MatchResult,
+    colorScheme: ColorScheme,
+    codeSnippetBackground: Color
 ): SymbolAnnotation {
-	return when (matchResult.value.first()) {
-		'@' -> SymbolAnnotation(
-			AnnotatedString(
-				text = matchResult.value,
-				spanStyle = SpanStyle(
-					color = colorScheme.primary,
-					fontWeight = FontWeight.Bold
-				)
-			),
-			StringAnnotation(
-				item = matchResult.value.substring(1),
-				start = matchResult.range.first,
-				end = matchResult.range.last,
-				tag = SymbolAnnotationType.NOTE.name
-			)
-		)
-		'*' -> SymbolAnnotation(
-			AnnotatedString(
-				text = matchResult.value.trim('*'),
-				spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-			),
-			null
-		)
-		'_' -> SymbolAnnotation(
-			AnnotatedString(
-				text = matchResult.value.trim('_'),
-				spanStyle = SpanStyle(fontStyle = FontStyle.Italic)
-			),
-			null
-		)
-		'~' -> SymbolAnnotation(
-			AnnotatedString(
-				text = matchResult.value.trim('~'),
-				spanStyle = SpanStyle(textDecoration = TextDecoration.LineThrough)
-			),
-			null
-		)
-		'`' -> SymbolAnnotation(
-			AnnotatedString(
-				text = matchResult.value.trim('`'),
-				spanStyle = SpanStyle(
-					fontFamily = FontFamily.Monospace,
-					fontSize = 12.sp,
-					background = codeSnippetBackground,
-					baselineShift = BaselineShift(0.2f)
-				)
-			),
-			null
-		)
-		'h' -> SymbolAnnotation(
-			AnnotatedString(
-				text = matchResult.value,
-				spanStyle = SpanStyle(
-					color = colorScheme.primary
-				)
-			),
-			StringAnnotation(
-				item = matchResult.value,
-				start = matchResult.range.first,
-				end = matchResult.range.last,
-				tag = SymbolAnnotationType.LINK.name
-			)
-		)
-		else -> SymbolAnnotation(AnnotatedString(matchResult.value), null)
-	}
+    return when (matchResult.value.first()) {
+        '@' -> SymbolAnnotation(
+            AnnotatedString(
+                text = matchResult.value,
+                spanStyle = SpanStyle(
+                    color = colorScheme.primary,
+                    fontWeight = FontWeight.Bold
+                )
+            ),
+            StringAnnotation(
+                item = matchResult.value.substring(1),
+                start = matchResult.range.first,
+                end = matchResult.range.last,
+                tag = SymbolAnnotationType.NOTE.name
+            )
+        )
+
+        '*' -> SymbolAnnotation(
+            AnnotatedString(
+                text = matchResult.value.trim('*'),
+                spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+            ),
+            null
+        )
+
+        '_' -> SymbolAnnotation(
+            AnnotatedString(
+                text = matchResult.value.trim('_'),
+                spanStyle = SpanStyle(fontStyle = FontStyle.Italic)
+            ),
+            null
+        )
+
+        '~' -> SymbolAnnotation(
+            AnnotatedString(
+                text = matchResult.value.trim('~'),
+                spanStyle = SpanStyle(textDecoration = TextDecoration.LineThrough)
+            ),
+            null
+        )
+
+        '`' -> SymbolAnnotation(
+            AnnotatedString(
+                text = matchResult.value.trim('`'),
+                spanStyle = SpanStyle(
+                    fontFamily = FontFamily.Monospace,
+                    fontSize = 12.sp,
+                    background = codeSnippetBackground,
+                    baselineShift = BaselineShift(0.2f)
+                )
+            ),
+            null
+        )
+
+        'h' -> SymbolAnnotation(
+            AnnotatedString(
+                text = matchResult.value,
+                spanStyle = SpanStyle(
+                    color = colorScheme.primary
+                )
+            ),
+            StringAnnotation(
+                item = matchResult.value,
+                start = matchResult.range.first,
+                end = matchResult.range.last,
+                tag = SymbolAnnotationType.LINK.name
+            )
+        )
+
+        else -> SymbolAnnotation(AnnotatedString(matchResult.value), null)
+    }
 }
 
 val AnnotatedString.haveCustomItem: Boolean
-	get() = startsWith('@') || startsWith('h')
+    get() = startsWith('@') || startsWith('h')

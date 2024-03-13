@@ -7,7 +7,12 @@ import com.looker.notesy.data.repository.BookmarkRepositoryImpl
 import com.looker.notesy.data.repository.NoteRepositoryImpl
 import com.looker.notesy.domain.repository.BookmarkRepository
 import com.looker.notesy.domain.repository.NoteRepository
-import com.looker.notesy.domain.use_case.*
+import com.looker.notesy.domain.use_case.AddNote
+import com.looker.notesy.domain.use_case.DeleteNote
+import com.looker.notesy.domain.use_case.GetLastId
+import com.looker.notesy.domain.use_case.GetNote
+import com.looker.notesy.domain.use_case.GetNotes
+import com.looker.notesy.domain.use_case.NoteUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

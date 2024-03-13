@@ -29,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,9 +48,9 @@ fun NoteItem(
 ) {
     SwipeToDismissBox(
         modifier = modifier
-			.fillMaxWidth()
-			.clip(MaterialTheme.shapes.large)
-			.clickable(onClick = onNoteClick),
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.large)
+            .clickable(onClick = onNoteClick),
         state = state,
         backgroundContent = {
             val direction = state.dismissDirection
@@ -66,9 +65,9 @@ fun NoteItem(
             }
             Box(
                 modifier = Modifier
-					.fillMaxSize()
-					.background(MaterialTheme.colorScheme.errorContainer)
-					.absolutePadding(left = 10.dp, right = 10.dp),
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.errorContainer)
+                    .absolutePadding(left = 10.dp, right = 10.dp),
                 contentAlignment = alignment
             ) {
                 Icon(imageVector = Icons.Rounded.Delete, contentDescription = null)

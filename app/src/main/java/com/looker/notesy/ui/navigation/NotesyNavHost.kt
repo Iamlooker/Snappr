@@ -16,34 +16,34 @@ import com.looker.notesy.ui.notes_detail.navigation.notesDetailScreen
 
 @Composable
 fun NotesyNavHost(
-	appState: NotesyAppState,
-	modifier: Modifier = Modifier,
-	startDestination: String = NOTES_SCREEN_ROUTE
+    appState: NotesyAppState,
+    modifier: Modifier = Modifier,
+    startDestination: String = NOTES_SCREEN_ROUTE
 ) {
-	val navController = appState.navController
-	NavHost(
-		navController = navController,
-		startDestination = startDestination,
-		modifier = modifier
-	) {
-		bookmarkGraph()
-		notesGraph(navController)
-	}
+    val navController = appState.navController
+    NavHost(
+        navController = navController,
+        startDestination = startDestination,
+        modifier = modifier
+    ) {
+        bookmarkGraph()
+        notesGraph(navController)
+    }
 }
 
 fun NavGraphBuilder.bookmarkGraph() {
-	bookmarksScreen()
+    bookmarksScreen()
 }
 
 fun NavGraphBuilder.notesGraph(navController: NavController) {
-	notesScreen(
-		onNoteClick = navController::navigateToDetailScreen,
-		onCreateNew = navController::navigateToAddScreen
-	)
-	addEditNoteScreen(navController::popBackStack)
-	notesDetailScreen(
-		onBackPressed = navController::popBackStack,
-		onEditClicked = navController::navigateToAddScreen,
-		onNavigateToNote = navController::navigateToDetailScreen
-	)
+    notesScreen(
+        onNoteClick = navController::navigateToDetailScreen,
+        onCreateNew = navController::navigateToAddScreen
+    )
+    addEditNoteScreen(navController::popBackStack)
+    notesDetailScreen(
+        onBackPressed = navController::popBackStack,
+        onEditClicked = navController::navigateToAddScreen,
+        onNavigateToNote = navController::navigateToDetailScreen
+    )
 }

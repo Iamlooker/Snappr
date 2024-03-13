@@ -7,10 +7,10 @@ import androidx.room.PrimaryKey
 @Entity
 @Stable
 data class Bookmark(
-	val url: String,
-	val name: String,
-	val artwork: String,
-	val lastModified: Long,
-	@PrimaryKey
-	val id: Long? = null
+    val url: String,
+    val name: String,
+    val artwork: String,
+    val lastModified: Long,
+    @PrimaryKey
+    val id: Long? = null
 )

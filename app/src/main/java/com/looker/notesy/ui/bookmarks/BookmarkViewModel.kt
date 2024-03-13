@@ -17,77 +17,77 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookmarkViewModel @Inject constructor(
-	private val repository: BookmarkRepository,
-	private val urlParser: UrlParser
+    private val repository: BookmarkRepository,
+    private val urlParser: UrlParser
 ) : ViewModel() {
 
-	private var initialUrl: String? by mutableStateOf(null)
+    private var initialUrl: String? by mutableStateOf(null)
 
-	val bookmarks = repository
-		.getAllBookmarkStream()
-		.stateIn(
-			scope = viewModelScope,
-			started = SharingStarted.WhileSubscribed(5_000),
-			initialValue = emptyList()
-		)
+    val bookmarks = repository
+        .getAllBookmarkStream()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = emptyList()
+        )
 
-	var isAddBookmarkDialogOpen by mutableStateOf(false)
-		private set
+    var isAddBookmarkDialogOpen by mutableStateOf(false)
+        private set
 
-	var deletedBookmark by mutableStateOf<Bookmark?>(null)
-		private set
+    var deletedBookmark by mutableStateOf<Bookmark?>(null)
+        private set
 
-	var bookmarkUrl by mutableStateOf("")
-		private set
+    var bookmarkUrl by mutableStateOf("")
+        private set
 
-	fun setPrimaryUrl(url: String?) {
-		initialUrl = url
-		if (url != null) {
-			showAddBookmarkDialog()
-			setUrl(url)
-		}
-	}
+    fun setPrimaryUrl(url: String?) {
+        initialUrl = url
+        if (url != null) {
+            showAddBookmarkDialog()
+            setUrl(url)
+        }
+    }
 
-	fun setUrl(url: String) {
-		bookmarkUrl = url
-	}
+    fun setUrl(url: String) {
+        bookmarkUrl = url
+    }
 
-	fun addBookmark() {
-		viewModelScope.launch(Dispatchers.IO) {
-			val url = bookmarkUrl
-			hideAddBookmarkDialog()
-			if (url.isNotBlank()) {
-				repository.upsertBookmark(
-					Bookmark(
-						url = url,
-						name = urlParser.getTitle(url),
-						artwork = urlParser.getFavIcon(url),
-						lastModified = System.currentTimeMillis()
-					)
-				)
-			}
-		}
-	}
+    fun addBookmark() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val url = bookmarkUrl
+            hideAddBookmarkDialog()
+            if (url.isNotBlank()) {
+                repository.upsertBookmark(
+                    Bookmark(
+                        url = url,
+                        name = urlParser.getTitle(url),
+                        artwork = urlParser.getFavIcon(url),
+                        lastModified = System.currentTimeMillis()
+                    )
+                )
+            }
+        }
+    }
 
-	fun showDeleteDialog(bookmark: Bookmark? = null) {
-		deletedBookmark = bookmark
-	}
+    fun showDeleteDialog(bookmark: Bookmark? = null) {
+        deletedBookmark = bookmark
+    }
 
-	fun confirmDelete() {
-		viewModelScope.launch {
-			if (deletedBookmark != null) {
-				repository.deleteBookmark(deletedBookmark!!)
-				showDeleteDialog()
-			}
-		}
-	}
+    fun confirmDelete() {
+        viewModelScope.launch {
+            if (deletedBookmark != null) {
+                repository.deleteBookmark(deletedBookmark!!)
+                showDeleteDialog()
+            }
+        }
+    }
 
-	fun showAddBookmarkDialog() {
-		isAddBookmarkDialogOpen = true
-	}
+    fun showAddBookmarkDialog() {
+        isAddBookmarkDialogOpen = true
+    }
 
-	fun hideAddBookmarkDialog() {
-		isAddBookmarkDialogOpen = false
-		bookmarkUrl = ""
-	}
+    fun hideAddBookmarkDialog() {
+        isAddBookmarkDialogOpen = false
+        bookmarkUrl = ""
+    }
 }

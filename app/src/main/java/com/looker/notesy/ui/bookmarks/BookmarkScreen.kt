@@ -1,7 +1,6 @@
 package com.looker.notesy.ui.bookmarks
 
 import android.text.format.DateUtils
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -41,7 +40,6 @@ import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -145,12 +143,12 @@ fun BookmarkItem(
     val uriHandler = LocalUriHandler.current
     SwipeToDismissBox(
         modifier = modifier
-			.fillMaxWidth()
-			.clip(MaterialTheme.shapes.extraLarge)
-			.combinedClickable(
-				onClick = { uriHandler.openUri(bookmark.url) },
-				onLongClick = { clipboardManager.setText(AnnotatedString(bookmark.url)) }
-			),
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.extraLarge)
+            .combinedClickable(
+                onClick = { uriHandler.openUri(bookmark.url) },
+                onLongClick = { clipboardManager.setText(AnnotatedString(bookmark.url)) }
+            ),
         state = dismissState,
         backgroundContent = {
             val direction = dismissState.dismissDirection
@@ -165,9 +163,12 @@ fun BookmarkItem(
             }
             Box(
                 modifier = Modifier
-					.fillMaxSize()
-					.background(MaterialTheme.colorScheme.errorContainer)
-					.absolutePadding(left = LocalSpacing.current.border, right = LocalSpacing.current.border),
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.errorContainer)
+                    .absolutePadding(
+                        left = LocalSpacing.current.border,
+                        right = LocalSpacing.current.border
+                    ),
                 contentAlignment = alignment
             ) {
                 Icon(imageVector = Icons.Rounded.Delete, contentDescription = null)
@@ -247,9 +248,9 @@ fun AddBookmarkDialog(
         Spacer(modifier = Modifier.height(24.dp))
         TransparentTextField(
             modifier = Modifier
-				.padding(horizontal = 24.dp)
-				.fillMaxWidth()
-				.wrapContentHeight(),
+                .padding(horizontal = 24.dp)
+                .fillMaxWidth()
+                .wrapContentHeight(),
             text = url,
             onValueChange = onUrlChange,
             hint = stringResource(R.string.label_url_hint),
@@ -259,8 +260,8 @@ fun AddBookmarkDialog(
         Spacer(modifier = Modifier.height(4.dp))
         FilledTonalButton(
             modifier = Modifier
-				.padding(horizontal = 24.dp)
-				.fillMaxWidth(),
+                .padding(horizontal = 24.dp)
+                .fillMaxWidth(),
             shape = MaterialTheme.shapes.large.bottom(),
             contentPadding = PaddingValues(16.dp),
             onClick = onConfirm

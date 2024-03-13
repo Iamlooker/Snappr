@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.Flow
 
 class BookmarkRepositoryImpl(private val dao: BookmarkDao) : BookmarkRepository {
 
-	override fun getAllBookmarkStream(): Flow<List<Bookmark>> = dao.getAllBookmarkStream()
+    override fun getAllBookmarkStream(): Flow<List<Bookmark>> = dao.getAllBookmarkStream()
 
-	override fun getBookmarkStream(id: Long): Flow<Bookmark?> = dao.getBookmarkStream(id)
+    override fun getBookmarkStream(id: Long): Flow<Bookmark?> = dao.getBookmarkStream(id)
 
-	override suspend fun deleteBookmark(bookmark: Bookmark) = dao.deleteBookmark(bookmark)
+    override suspend fun deleteBookmark(bookmark: Bookmark) = dao.deleteBookmark(bookmark)
 
-	override suspend fun upsertBookmark(bookMark: Bookmark) = dao.upsertBookmark(bookMark)
+    override suspend fun upsertBookmark(bookMark: Bookmark) = dao.upsertBookmark(bookMark)
 
 }

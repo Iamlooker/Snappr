@@ -6,19 +6,19 @@ import com.looker.notesy.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.Flow
 
 class NoteRepositoryImpl(
-	private val dao: NoteDao
-): NoteRepository {
-	override fun getNotes(): Flow<List<Note>> = dao.getAllNotes()
+    private val dao: NoteDao
+) : NoteRepository {
+    override fun getNotes(): Flow<List<Note>> = dao.getAllNotes()
 
-	override fun getNoteById(id: Int): Flow<Note?> = dao.getNoteById(id)
+    override fun getNoteById(id: Int): Flow<Note?> = dao.getNoteById(id)
 
-	override fun getLastNoteId(): Flow<Int?> = dao.getLastNoteId()
+    override fun getLastNoteId(): Flow<Int?> = dao.getLastNoteId()
 
-	override suspend fun insertNote(note: Note) {
-		dao.insertNote(note)
-	}
+    override suspend fun insertNote(note: Note) {
+        dao.insertNote(note)
+    }
 
-	override suspend fun deleteNote(note: Note) {
-		dao.deleteNote(note)
-	}
+    override suspend fun deleteNote(note: Note) {
+        dao.deleteNote(note)
+    }
 }

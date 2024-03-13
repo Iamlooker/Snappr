@@ -19,17 +19,17 @@ private const val PREFERENCES = "notesy_preferences"
 @InstallIn(SingletonComponent::class)
 object DatastoreModule {
 
-	@Singleton
-	@Provides
-	fun provideDatastore(
-		@ApplicationContext context: Context
-	): DataStore<Preferences> = PreferenceDataStoreFactory.create {
-		context.preferencesDataStoreFile(PREFERENCES)
-	}
+    @Singleton
+    @Provides
+    fun provideDatastore(
+        @ApplicationContext context: Context
+    ): DataStore<Preferences> = PreferenceDataStoreFactory.create {
+        context.preferencesDataStoreFile(PREFERENCES)
+    }
 
-	@Singleton
-	@Provides
-	fun provideUserPreferencesRepository(
-		dataStore: DataStore<Preferences>
-	): AppSettingsRepository = AppSettingsRepository(dataStore)
+    @Singleton
+    @Provides
+    fun provideUserPreferencesRepository(
+        dataStore: DataStore<Preferences>
+    ): AppSettingsRepository = AppSettingsRepository(dataStore)
 }

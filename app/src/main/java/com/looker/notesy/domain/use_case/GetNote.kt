@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 
 class GetNote(private val repository: NoteRepository) {
-	operator fun invoke(id: Int): Flow<Note> {
-		return repository.getNoteById(id).filterNotNull()
-	}
+    operator fun invoke(id: Int): Flow<Note> {
+        return repository.getNoteById(id).filterNotNull()
+    }
 }

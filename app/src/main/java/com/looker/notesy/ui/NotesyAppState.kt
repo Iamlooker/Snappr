@@ -3,10 +3,12 @@ package com.looker.notesy.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
-import androidx.navigation.*
+import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import com.looker.notesy.ui.bookmarks.navigation.BOOKMARKS_SCREEN_ROUTE
 import com.looker.notesy.ui.bookmarks.navigation.navigateToBookmarks
 import com.looker.notesy.ui.navigation.TopLevelDestination

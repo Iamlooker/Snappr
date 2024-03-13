@@ -8,8 +8,12 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 
 @Composable
 operator fun PaddingValues.plus(paddingValues: PaddingValues): PaddingValues = PaddingValues(
-	start = calculateStartPadding(LocalLayoutDirection.current) + paddingValues.calculateStartPadding(LocalLayoutDirection.current),
-	end = calculateEndPadding(LocalLayoutDirection.current) + paddingValues.calculateEndPadding(LocalLayoutDirection.current),
-	top = calculateTopPadding() + paddingValues.calculateTopPadding(),
-	bottom = calculateBottomPadding() + paddingValues.calculateBottomPadding(),
+    start = calculateStartPadding(LocalLayoutDirection.current) + paddingValues.calculateStartPadding(
+        LocalLayoutDirection.current
+    ),
+    end = calculateEndPadding(LocalLayoutDirection.current) + paddingValues.calculateEndPadding(
+        LocalLayoutDirection.current
+    ),
+    top = calculateTopPadding() + paddingValues.calculateTopPadding(),
+    bottom = calculateBottomPadding() + paddingValues.calculateBottomPadding(),
 )

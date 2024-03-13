@@ -7,9 +7,9 @@ import com.looker.notesy.domain.repository.NoteRepository
 
 class AddNote(private val repository: NoteRepository) {
 
-	@Throws(InvalidNoteException::class)
-	suspend operator fun invoke(note: Note) {
-		if (note.content.isBlank() && note.title.isBlank()) throw InvalidNoteException(R.string.label_note_empty)
-		repository.insertNote(note)
-	}
+    @Throws(InvalidNoteException::class)
+    suspend operator fun invoke(note: Note) {
+        if (note.content.isBlank() && note.title.isBlank()) throw InvalidNoteException(R.string.label_note_empty)
+        repository.insertNote(note)
+    }
 }
