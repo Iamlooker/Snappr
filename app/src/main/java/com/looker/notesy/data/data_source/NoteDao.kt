@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import com.looker.notesy.domain.model.Note
 import kotlinx.coroutines.flow.Flow
 
@@ -20,7 +21,7 @@ interface NoteDao {
     @Query("SELECT id FROM note ORDER BY id DESC LIMIT 1")
     fun getLastNoteId(): Flow<Int?>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insertNote(note: Note)
 
     @Delete

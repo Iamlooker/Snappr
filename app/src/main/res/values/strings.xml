@@ -16,8 +16,8 @@
 
     <string name="label_bookmarks">Bookmarks</string>
     <string name="label_edit_mode">Edit Mode</string>
-    <string name="label_order_ascending">Ascending</string>
-    <string name="label_order_descending">Descending</string>
+    <string name="label_order_ascending">Asc.</string>
+    <string name="label_order_descending">Desc.</string>
     <string name="label_order_title">Title</string>
     <string name="label_order_date">Date</string>
     <string name="label_order_id">Id</string>

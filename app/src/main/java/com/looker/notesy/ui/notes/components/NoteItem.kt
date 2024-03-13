@@ -29,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.looker.notesy.domain.model.Note
@@ -76,8 +75,7 @@ fun NoteItem(
         content = {
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.outlineVariant),
                 shape = MaterialTheme.shapes.large
             ) {
                 Column(
@@ -96,7 +94,6 @@ fun NoteItem(
                             rawText = note.title.trim(),
                             enableSelection = false,
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold,
                             maxLines = 1
                         )
                     }
@@ -120,7 +117,7 @@ fun NoteItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun NotePrev() {
+private fun NotePrev() {
     NotesyTheme {
         NoteItem(
             note = Note(

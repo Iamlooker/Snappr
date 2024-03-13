@@ -1,7 +1,6 @@
 package com.looker.notesy.ui.notes.components
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -18,9 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.rounded.ArrowDownward
+import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -44,9 +43,9 @@ import com.looker.notesy.ui.theme.NotesyTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderChips(
-    modifier: Modifier = Modifier,
     noteOrder: NoteOrder,
-    onOrderChange: (NoteOrder) -> Unit
+    onOrderChange: (NoteOrder) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -74,26 +73,25 @@ fun OrderChips(
             modifier = Modifier
                 .height(FilterChipDefaults.Height - 4.dp)
                 .width(1.dp)
-                .background(MaterialTheme.colorScheme.outline)
+                .background(MaterialTheme.colorScheme.outlineVariant)
         )
         OrderChip(
             text = stringResource(R.string.label_order_ascending),
             isSelected = { noteOrder.orderType == OrderType.Ascending },
-            icon = Icons.Default.FilterList
+            icon = Icons.Rounded.ArrowUpward
         ) {
             onOrderChange(noteOrder.setOrder(OrderType.Ascending))
         }
         OrderChip(
             text = stringResource(R.string.label_order_descending),
             isSelected = { noteOrder.orderType == OrderType.Descending },
-            icon = Icons.AutoMirrored.Filled.Sort
+            icon = Icons.Rounded.ArrowDownward
         ) {
             onOrderChange(noteOrder.setOrder(OrderType.Descending))
         }
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun OrderChip(
@@ -116,11 +114,11 @@ fun OrderChip(
                     targetState = if (isSelected()) Icons.Default.Done else leadingIcon,
                     transitionSpec = {
                         if (targetState == Icons.Default.Done) {
-                            (slideInVertically { height -> height } + fadeIn()).togetherWith(
-                                slideOutVertically { height -> -height } + fadeOut())
+                            (slideInVertically { height -> height } + fadeIn()) togetherWith
+                                    (slideOutVertically { height -> -height } + fadeOut())
                         } else {
-                            (slideInVertically { height -> -height } + fadeIn()).togetherWith(
-                                slideOutVertically { height -> height } + fadeOut())
+                            (slideInVertically { height -> -height } + fadeIn()) togetherWith
+                                    (slideOutVertically { height -> height } + fadeOut())
                         } using SizeTransform(false)
                     },
                     label = ""
@@ -134,7 +132,7 @@ fun OrderChip(
 
 @Preview
 @Composable
-fun OrderChipPreview() {
+private fun OrderChipPreview() {
     NotesyTheme {
         Surface {
             OrderChips(noteOrder = NoteOrder.Title(OrderType.Ascending), onOrderChange = {})
