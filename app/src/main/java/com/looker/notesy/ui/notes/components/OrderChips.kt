@@ -80,14 +80,14 @@ fun OrderChips(
             isSelected = { noteOrder.orderType == OrderType.Ascending },
             icon = Icons.Rounded.ArrowUpward
         ) {
-            onOrderChange(noteOrder.setOrder(OrderType.Ascending))
+            onOrderChange(noteOrder by OrderType.Ascending)
         }
         OrderChip(
             text = stringResource(R.string.label_order_descending),
             isSelected = { noteOrder.orderType == OrderType.Descending },
             icon = Icons.Rounded.ArrowDownward
         ) {
-            onOrderChange(noteOrder.setOrder(OrderType.Descending))
+            onOrderChange(noteOrder by OrderType.Descending)
         }
     }
 }

@@ -8,7 +8,7 @@ sealed class NoteOrder(val orderType: OrderType) {
 
     data class Id(val order: OrderType) : NoteOrder(order)
 
-    fun setOrder(orderType: OrderType): NoteOrder {
+    infix fun by(orderType: OrderType): NoteOrder {
         return when (this) {
             is Date -> Date(orderType)
             is Title -> Title(orderType)
