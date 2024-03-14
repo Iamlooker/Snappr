@@ -56,19 +56,19 @@ fun OrderChips(
     ) {
         OrderChip(
             text = stringResource(R.string.label_order_title),
-            isSelected = { noteOrder is NoteOrder.Title }) {
-            onOrderChange(NoteOrder.Title(noteOrder.orderType))
-        }
+            isSelected = { noteOrder is NoteOrder.Title },
+            onClick = { onOrderChange(NoteOrder.Title(noteOrder.orderType)) }
+        )
         OrderChip(
             text = stringResource(R.string.label_order_date),
-            isSelected = { noteOrder is NoteOrder.Date }) {
-            onOrderChange(NoteOrder.Date(noteOrder.orderType))
-        }
+            isSelected = { noteOrder is NoteOrder.Date },
+            onClick = { onOrderChange(NoteOrder.Date(noteOrder.orderType)) }
+        )
         OrderChip(
             text = stringResource(R.string.label_order_id),
-            isSelected = { noteOrder is NoteOrder.Id }) {
-            onOrderChange(NoteOrder.Id(noteOrder.orderType))
-        }
+            isSelected = { noteOrder is NoteOrder.Id },
+            onClick = { onOrderChange(NoteOrder.Id(noteOrder.orderType)) }
+        )
         Spacer(
             modifier = Modifier
                 .height(FilterChipDefaults.Height - 4.dp)
@@ -78,17 +78,15 @@ fun OrderChips(
         OrderChip(
             text = stringResource(R.string.label_order_ascending),
             isSelected = { noteOrder.orderType == OrderType.Ascending },
-            icon = Icons.Rounded.ArrowUpward
-        ) {
-            onOrderChange(noteOrder by OrderType.Ascending)
-        }
+            icon = Icons.Rounded.ArrowUpward,
+            onClick = { onOrderChange(noteOrder by OrderType.Ascending) }
+        )
         OrderChip(
             text = stringResource(R.string.label_order_descending),
             isSelected = { noteOrder.orderType == OrderType.Descending },
-            icon = Icons.Rounded.ArrowDownward
-        ) {
-            onOrderChange(noteOrder by OrderType.Descending)
-        }
+            icon = Icons.Rounded.ArrowDownward,
+            onClick = { onOrderChange(noteOrder by OrderType.Descending) }
+        )
     }
 }
 
@@ -96,10 +94,10 @@ fun OrderChips(
 @Composable
 fun OrderChip(
     text: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    isSelected: () -> Boolean = { false },
     icon: ImageVector? = null,
-    onClick: () -> Unit
+    isSelected: () -> Boolean = { false },
 ) {
     FilterChip(
         modifier = modifier,
