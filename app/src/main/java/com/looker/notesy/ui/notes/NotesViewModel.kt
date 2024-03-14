@@ -8,11 +8,10 @@ import com.looker.notesy.domain.model.Note
 import com.looker.notesy.domain.use_case.NoteUseCases
 import com.looker.notesy.domain.use_case.noteOrder
 import com.looker.notesy.domain.utils.NoteOrder
+import com.looker.notesy.ui.utils.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -21,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NotesViewModel @Inject constructor(
     private val noteUseCases: NoteUseCases,
-    private val settings: AppSettingsRepository
+    private val settings: AppSettingsRepository,
 ) : ViewModel() {
 
     private val deleteConfirmation = MutableStateFlow<Note?>(null)
@@ -40,11 +39,7 @@ class NotesViewModel @Inject constructor(
             showDeleteDialog = deleteDialog,
             snackBarMessage = snackBarMessage
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = NotesState()
-    )
+    }.asStateFlow(initial = NotesState())
 
     private var recentlyDeletedNote: Note? = null
     private val deletedNoteLock: Mutex = Mutex()

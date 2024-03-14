@@ -7,29 +7,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.looker.notesy.domain.model.Bookmark
 import com.looker.notesy.domain.repository.BookmarkRepository
+import com.looker.notesy.ui.utils.asStateFlow
 import com.looker.notesy.util.UrlParser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class BookmarkViewModel @Inject constructor(
     private val repository: BookmarkRepository,
-    private val urlParser: UrlParser
+    private val urlParser: UrlParser,
 ) : ViewModel() {
 
     private var initialUrl: String? by mutableStateOf(null)
 
     val bookmarks = repository
         .getAllBookmarkStream()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = emptyList()
-        )
+        .asStateFlow(initial = emptyList())
 
     var isAddBookmarkDialogOpen by mutableStateOf(false)
         private set

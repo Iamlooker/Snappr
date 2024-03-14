@@ -2,6 +2,7 @@ package com.looker.notesy.ui.add_edit_note
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -13,12 +14,11 @@ import com.looker.notesy.domain.model.InvalidNoteException
 import com.looker.notesy.domain.model.Note
 import com.looker.notesy.domain.use_case.NoteUseCases
 import com.looker.notesy.ui.add_edit_note.navigation.NOTE_ID_ARG
+import com.looker.notesy.ui.utils.asStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class AddEditViewModel
 @Inject constructor(
     private val noteUseCases: NoteUseCases,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val inputNoteId = savedStateHandle.get<Int?>(NOTE_ID_ARG)?.takeIf { it != -1 }
@@ -45,7 +45,7 @@ class AddEditViewModel
         private set
 
     @get:StringRes
-    var errorMessage by mutableStateOf<Int>(-1)
+    var errorMessage by mutableIntStateOf(-1)
         private set
 
     val isIdValid = snapshotFlow { noteId }
@@ -53,11 +53,7 @@ class AddEditViewModel
             val id = currentId.removePrefix("# ").toIntOrNull()
             !noteUseCases.getNotes.contains(id)
         }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = true
-        )
+        .asStateFlow(initial = true)
 
     init {
         viewModelScope.launch {

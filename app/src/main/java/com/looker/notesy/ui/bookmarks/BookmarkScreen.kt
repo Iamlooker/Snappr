@@ -230,11 +230,11 @@ fun BookmarkItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddBookmarkDialog(
-    modifier: Modifier = Modifier,
     url: String,
     onUrlChange: (String) -> Unit,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     ModalBottomSheet(
         modifier = modifier,
