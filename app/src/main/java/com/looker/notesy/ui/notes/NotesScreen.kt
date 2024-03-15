@@ -45,7 +45,7 @@ import com.looker.notesy.ui.utils.plus
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesScreen(
-    viewModel: NotesViewModel = hiltViewModel(),
+    viewModel: NotesViewModel,
     onCreateNewClick: () -> Unit,
     onNoteClick: (Int?) -> Unit,
 ) {
