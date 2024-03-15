@@ -11,6 +11,8 @@ interface BookmarkRepository {
 
     suspend fun deleteBookmark(bookmark: Bookmark)
 
+    suspend fun insertBookmark(url: String)
+
     suspend fun upsertBookmark(bookMark: Bookmark)
 
 }

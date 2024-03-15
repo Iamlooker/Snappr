@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -131,15 +132,16 @@ private fun LargeBookmarkItem(
         shape = MaterialTheme.shapes.extraLarge,
         color = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
-        Column() {
+        Column {
             AsyncImage(
                 model = image,
                 contentDescription = null,
+                contentScale = ContentScale.FillWidth,
                 modifier = Modifier
-                    .padding(3.dp)
-                    .clip(MaterialTheme.shapes.extraLarge)
+                    .padding(4.dp)
                     .fillMaxWidth()
                     .aspectRatio(16F / 9F)
+                    .clip(MaterialTheme.shapes.extraLarge)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -154,6 +156,7 @@ private fun LargeBookmarkItem(
                 modifier = Modifier.padding(horizontal = LocalSpacing.current.border),
                 text = url,
                 style = MaterialTheme.typography.labelMedium,
+                textDecoration = TextDecoration.Underline,
                 color = MaterialTheme.colorScheme.outline,
                 maxLines = 1
             )
@@ -196,7 +199,7 @@ private fun SmallBookmarkItem(
         ) {
             NotesyImageWithAmbience(
                 modifier = Modifier.size(56.dp),
-                imageModifier = Modifier.clip(CircleShape),
+                imageModifier = Modifier.clip(MaterialTheme.shapes.medium),
                 data = image
             )
             Column {

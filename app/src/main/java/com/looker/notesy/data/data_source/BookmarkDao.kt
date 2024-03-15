@@ -20,6 +20,6 @@ interface BookmarkDao {
     suspend fun deleteBookmark(bookmark: Bookmark)
 
     @Upsert
-    suspend fun upsertBookmark(bookMark: Bookmark)
+    suspend fun upsertBookmark(bookMark: Bookmark): Long
 
 }

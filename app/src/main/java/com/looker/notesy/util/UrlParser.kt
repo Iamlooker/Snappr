@@ -5,12 +5,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import javax.inject.Inject
 
-class UrlParser @Inject constructor(
-) {
+object UrlParser {
 
-    var document: Document? = null
+    private var document: Document? = null
 
     suspend fun connect(url: String) {
         withContext(Dispatchers.IO) {
@@ -23,31 +21,27 @@ class UrlParser @Inject constructor(
         }
     }
 
-    suspend fun getTitle(url: String): String = withContext(Dispatchers.IO) {
-        document?.title() ?: url.domain
+    suspend fun getTitle(): String? = withContext(Dispatchers.IO) {
+        document?.title()
     }
 
     suspend fun previewImage(): String? = withContext(Dispatchers.IO) {
         val metaTags = document?.select("meta") ?: return@withContext null
 
-        for (meta in metaTags) {
-            val property = meta.attr("property")
-            val content = meta.attr("content")
-
-            return@withContext content.takeIf {
-                property == "og:image"
-                        || property == "twitter:image"
-                        || property == "og:image:url"
-                        || property == "og:image:secure_url"
-            }
+        val tag = metaTags.find { meta ->
+            meta.attr("property") in SUPPORTED_PROPERTIES
         }
-        null
+        tag?.attr("content")
     }
 }
 
+private val SUPPORTED_PROPERTIES = setOf(
+    "og:image", "og:image:url", "og:image:secure_url", "twitter:image"
+)
+
 fun String.favIcon(size: Int = 128): String = domain.favIconApi(size)
 
-private val String.domain: String
+val String.domain: String
     get() {
         val uri = toUri()
         val domain = uri.host

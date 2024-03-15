@@ -50,11 +50,7 @@ import com.looker.notesy.ui.utils.plus
 @Composable
 fun BookmarkScreen(
     viewModel: BookmarkViewModel = hiltViewModel(),
-    initial: String? = null,
 ) {
-    LaunchedEffect(initial) {
-        viewModel.setPrimaryUrl(initial)
-    }
     Scaffold(
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
