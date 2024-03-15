@@ -47,7 +47,7 @@ import com.looker.notesy.ui.utils.plus
 fun NotesScreen(
     viewModel: NotesViewModel = hiltViewModel(),
     onCreateNewClick: () -> Unit,
-    onNoteClick: (Int?) -> Unit
+    onNoteClick: (Int?) -> Unit,
 ) {
     val state by viewModel.noteState.collectAsStateWithLifecycle()
     val deleteNoteConfirmation = state.showDeleteDialog
@@ -100,7 +100,9 @@ fun NotesScreen(
                 OrderChips(noteOrder = state.noteOrder, onOrderChange = viewModel::reorderNotes)
             }
             items(
-                items = state.notesList
+                items = state.notesList,
+                key = { it.id!! },
+                contentType = { it.contentType }
             ) { note ->
                 val dismissState = rememberSwipeToDismissBoxState(
                     confirmValueChange = {
