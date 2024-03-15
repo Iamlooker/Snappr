@@ -10,7 +10,6 @@ import com.looker.notesy.R
 
 val FontFamily.Companion.Poppins: FontFamily
     get() = FontFamily(
-        Font(R.font.poppins_semi_bold, weight = FontWeight.SemiBold),
         Font(R.font.poppins_regular, weight = FontWeight.Normal),
         Font(R.font.poppins_medium, weight = FontWeight.Medium),
     )
