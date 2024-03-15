@@ -28,18 +28,18 @@ fun NavGraphBuilder.bookmarksScreen() {
         route = BOOKMARKS_SCREEN_ROUTE,
         deepLinks = linkBasedDeepLinks
     ) { backStackEntry ->
-        val intent = remember {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                backStackEntry.arguments?.getParcelable(
-                    NavController.KEY_DEEP_LINK_INTENT,
-                    Intent::class.java
-                )
-            } else {
-                backStackEntry.arguments?.getParcelable(
-                    NavController.KEY_DEEP_LINK_INTENT
-                ) as? Intent
-            }
-        }
-        BookmarkScreen(initial = intent?.getStringExtra(Intent.EXTRA_TEXT))
+//        val intent = remember {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//                backStackEntry.arguments?.getParcelable(
+//                    NavController.KEY_DEEP_LINK_INTENT,
+//                    Intent::class.java
+//                )
+//            } else {
+//                backStackEntry.arguments?.getParcelable(
+//                    NavController.KEY_DEEP_LINK_INTENT
+//                ) as? Intent
+//            }
+//        }
+        BookmarkScreen()
     }
 }

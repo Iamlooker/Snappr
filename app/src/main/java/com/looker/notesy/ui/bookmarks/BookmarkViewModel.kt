@@ -1,14 +1,16 @@
 package com.looker.notesy.ui.bookmarks
 
+import android.content.Intent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.looker.notesy.domain.model.Bookmark
 import com.looker.notesy.domain.repository.BookmarkRepository
 import com.looker.notesy.ui.utils.asStateFlow
-import com.looker.notesy.util.UrlParser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,31 +19,24 @@ import javax.inject.Inject
 @HiltViewModel
 class BookmarkViewModel @Inject constructor(
     private val repository: BookmarkRepository,
-    private val urlParser: UrlParser,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private var initialUrl: String? by mutableStateOf(null)
+    private val deeplinkIntent: Intent? = savedStateHandle[NavController.KEY_DEEP_LINK_INTENT]
+    private val url: String? = deeplinkIntent?.getStringExtra(Intent.EXTRA_TEXT)
 
     val bookmarks = repository
         .getAllBookmarkStream()
         .asStateFlow(initial = emptyList())
 
-    var isAddBookmarkDialogOpen by mutableStateOf(false)
+    var isAddBookmarkDialogOpen: Boolean by mutableStateOf(false)
         private set
 
-    var deletedBookmark by mutableStateOf<Bookmark?>(null)
+    var deletedBookmark: Bookmark? by mutableStateOf(null)
         private set
 
-    var bookmarkUrl by mutableStateOf("")
+    var bookmarkUrl: String by mutableStateOf("")
         private set
-
-    fun setPrimaryUrl(url: String?) {
-        initialUrl = url
-        if (url != null) {
-            showAddBookmarkDialog()
-            setUrl(url)
-        }
-    }
 
     fun setUrl(url: String) {
         bookmarkUrl = url
@@ -52,14 +47,7 @@ class BookmarkViewModel @Inject constructor(
             val url = bookmarkUrl
             hideAddBookmarkDialog()
             if (url.isNotBlank()) {
-                repository.upsertBookmark(
-                    Bookmark(
-                        url = url,
-                        name = urlParser.getTitle(url),
-                        artwork = urlParser.getFavIcon(url),
-                        lastModified = System.currentTimeMillis()
-                    )
-                )
+                repository.insertBookmark(url)
             }
         }
     }
@@ -85,4 +73,12 @@ class BookmarkViewModel @Inject constructor(
         isAddBookmarkDialogOpen = false
         bookmarkUrl = ""
     }
+
+    init {
+        if (url != null) {
+            showAddBookmarkDialog()
+            setUrl(url)
+        }
+    }
+
 }

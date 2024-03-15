@@ -14,8 +14,17 @@ data class Note(
     @ColumnInfo("time")
     val timeCreated: Long,
     @PrimaryKey
-    val id: Int? = null
-)
+    val id: Int? = null,
+) {
+    val contentType: NoteContentType
+        get() = if (title.isBlank()) NoteContentType.NoTitle
+        else if (content.isBlank()) NoteContentType.NoContent
+        else NoteContentType.Full
+}
+
+enum class NoteContentType {
+    NoTitle, NoContent, Full
+}
 
 class InvalidNoteException(@StringRes val errorId: Int, message: String? = null) :
     Exception(message)
