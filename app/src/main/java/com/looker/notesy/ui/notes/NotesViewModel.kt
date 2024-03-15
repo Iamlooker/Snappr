@@ -32,7 +32,6 @@ class NotesViewModel @Inject constructor(
         snackBarMessage,
         settings.stream
     ) { notes, deleteDialog, snackBarMessage, settings ->
-        Log.e("tag", notes.toString())
         NotesState(
             notesList = notes.noteOrder(settings.noteOrder),
             noteOrder = settings.noteOrder,
