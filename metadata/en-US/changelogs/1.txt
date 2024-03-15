@@ -1,0 +1,5 @@
+Initial Release
+
+Supports note saving, and bookmarking.
+
+You can share the url from browser to add it to Snappr
