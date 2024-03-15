@@ -9,6 +9,7 @@ import com.looker.notesy.domain.model.Bookmark
 import com.looker.notesy.domain.repository.BookmarkRepository
 import com.looker.notesy.ui.utils.asStateFlow
 import com.looker.notesy.util.UrlParser
+import com.looker.notesy.util.favIcon
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +31,9 @@ class BookmarkViewModel @Inject constructor(
         private set
 
     var deletedBookmark by mutableStateOf<Bookmark?>(null)
+        private set
+
+    var isDeletingBookmark by mutableStateOf(false)
         private set
 
     var bookmarkUrl by mutableStateOf("")
@@ -56,8 +60,9 @@ class BookmarkViewModel @Inject constructor(
                     Bookmark(
                         url = url,
                         name = urlParser.getTitle(url),
-                        artwork = urlParser.getFavIcon(url),
-                        lastModified = System.currentTimeMillis()
+                        favIcon = url.favIcon(),
+                        lastModified = System.currentTimeMillis(),
+                        previewImage = urlParser.previewImage()
                     )
                 )
             }
@@ -65,6 +70,7 @@ class BookmarkViewModel @Inject constructor(
     }
 
     fun showDeleteDialog(bookmark: Bookmark? = null) {
+        isDeletingBookmark = true
         deletedBookmark = bookmark
     }
 
