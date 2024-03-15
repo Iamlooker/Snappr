@@ -10,7 +10,7 @@ Snappr is a **minimalist** note-taking and bookmarking app designed to help you 
 
 ## Screenshots
 
-<img src="media/home.png" width="25%" /><img src="media/view.png" width="25%" /><img src="media/edit.png" width="25%" /><img src="media/bookmark.png" width="25%" />
+<img src="metadata/en-US/images/home.png" width="25%" /><img src="metadata/en-US/images/view.png" width="25%" /><img src="metadata/en-US/images/edit.png" width="25%" /><img src="metadata/en-US/images/bookmark.png" width="25%" />
 
 ### Bookmarking Made Simple
 
