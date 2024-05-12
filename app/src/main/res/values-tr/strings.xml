@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Snappr</string>
+
+    <string name="action_restore">Geri Yükle</string>
+    <string name="action_go_back">Geri Dön</string>
+    <string name="action_add">Ekle</string>
+    <string name="action_add_note">Not Ekle</string>
+    <string name="action_add_bookmark">Yer İşareti Ekle</string>
+    <string name="action_save">Kaydet</string>
+    <string name="action_edit">Düzenle</string>
+    <string name="action_delete">Sil</string>
+    <string name="action_cancel">İptal</string>
+
+    <string name="hint_title">Başlık</string>
+    <string name="hint_content">İçerik</string>
+
+    <string name="label_bookmarks">Yer İşaretleri</string>
+    <string name="label_edit_mode">Düzenleme Modu</string>
+    <string name="label_order_ascending">Aza.</string>
+    <string name="label_order_descending">Art.</string>
+    <string name="label_order_title">Başlık</string>
+    <string name="label_order_date">Tarih</string>
+    <string name="label_order_id">Id</string>
+    <string name="label_undo_delete">Silmeyi Geri Al</string>
+    <string name="label_view_mode">Görüntüleme Modu</string>
+    <string name="label_last_modified">Son Düzenleme:</string>
+    <string name="label_url_hint">https://…</string>
+
+    <string name="label_delete_heading">Sil: %s</string>
+    <string name="label_delete_confirmation">Bu notu silmek istediğinizden emin misiniz?</string>
+
+    <string name="label_note_empty">Not boş, geri dönmek için tekrar basın</string>
+</resources>
