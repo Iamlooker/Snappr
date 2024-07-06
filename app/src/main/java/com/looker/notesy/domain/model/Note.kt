@@ -5,6 +5,9 @@ import androidx.compose.runtime.Stable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Entity
 @Stable
@@ -28,3 +31,16 @@ enum class NoteContentType {
 
 class InvalidNoteException(@StringRes val errorId: Int, message: String? = null) :
     Exception(message)
+
+fun formatDate(
+    time: Long,
+    dateTimeFormat: DateTimeFormat = DateTimeFormat.Short,
+    locale: Locale = Locale.getDefault(Locale.Category.FORMAT),
+): String {
+    val format = SimpleDateFormat(dateTimeFormat.format, locale)
+    return format.format(Date(time))
+}
+
+enum class DateTimeFormat(val format: String) {
+    Short("dd-MMM-yy"), Long("EEEE, dd-MMM-yyyy"),
+}

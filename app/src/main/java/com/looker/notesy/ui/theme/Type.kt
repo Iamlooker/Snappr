@@ -1,80 +1,47 @@
 package com.looker.notesy.ui.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.googlefonts.Font
+import androidx.compose.ui.text.googlefonts.GoogleFont
 import com.looker.notesy.R
 
-val FontFamily.Companion.Poppins: FontFamily
-    get() = FontFamily(
-        Font(R.font.poppins_regular, weight = FontWeight.Normal),
-        Font(R.font.poppins_medium, weight = FontWeight.Medium),
-    )
+val provider = GoogleFont.Provider(
+    providerAuthority = "com.google.android.gms.fonts",
+    providerPackage = "com.google.android.gms",
+    certificates = R.array.com_google_android_gms_fonts_certs
+)
 
-val FontFamily.Companion.Outfit: FontFamily
-    get() = FontFamily(
-        Font(R.font.outfit_semi_bold, weight = FontWeight.SemiBold),
-        Font(R.font.outfit_medium, weight = FontWeight.Medium),
+val bodyFontFamily = FontFamily(
+    Font(
+        googleFont = GoogleFont("Poppins"),
+        fontProvider = provider,
     )
+)
+
+val displayFontFamily = FontFamily(
+    Font(
+        googleFont = GoogleFont("Darker Grotesque"),
+        fontProvider = provider,
+    )
+)
+
+val baseline = Typography()
 
 val Typography = Typography(
-    headlineMedium = TextStyle(
-        fontFamily = FontFamily.Outfit,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 28.sp,
-        lineHeight = 32.0.sp,
-        letterSpacing = 2.0.sp
-    ),
-    headlineSmall = TextStyle(
-        fontFamily = FontFamily.Outfit,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 18.sp,
-        lineHeight = 22.0.sp,
-        letterSpacing = 0.0.sp
-    ),
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Outfit,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 22.sp,
-        lineHeight = 28.0.sp,
-        letterSpacing = 0.0.sp
-    ),
-    titleMedium = TextStyle(
-        fontFamily = FontFamily.Outfit,
-        fontWeight = FontWeight.Medium,
-        fontSize = 18.sp,
-        lineHeight = 22.0.sp,
-        letterSpacing = 0.2.sp
-    ),
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Poppins,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 18.sp,
-        letterSpacing = 0.5.sp
-    ),
-    bodyMedium = TextStyle(
-        fontFamily = FontFamily.Poppins,
-        fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 16.0.sp,
-        letterSpacing = 0.2.sp
-    ),
-    labelLarge = TextStyle(
-        fontFamily = FontFamily.Poppins,
-        fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
-        lineHeight = 18.0.sp,
-        letterSpacing = 0.1.sp
-    ),
-    labelMedium = TextStyle(
-        fontFamily = FontFamily.Poppins,
-        fontWeight = FontWeight.Medium,
-        fontSize = 12.sp,
-        lineHeight = 16.0.sp,
-        letterSpacing = 0.5.sp
-    ),
+    displayLarge = baseline.displayLarge.copy(fontFamily = displayFontFamily),
+    displayMedium = baseline.displayMedium.copy(fontFamily = displayFontFamily),
+    displaySmall = baseline.displaySmall.copy(fontFamily = displayFontFamily),
+    headlineLarge = baseline.headlineLarge.copy(fontFamily = displayFontFamily),
+    headlineMedium = baseline.headlineMedium.copy(fontFamily = displayFontFamily),
+    headlineSmall = baseline.headlineSmall.copy(fontFamily = displayFontFamily),
+    titleLarge = baseline.titleLarge.copy(fontFamily = displayFontFamily),
+    titleMedium = baseline.titleMedium.copy(fontFamily = displayFontFamily),
+    titleSmall = baseline.titleSmall.copy(fontFamily = displayFontFamily),
+    bodyLarge = baseline.bodyLarge.copy(fontFamily = bodyFontFamily),
+    bodyMedium = baseline.bodyMedium.copy(fontFamily = bodyFontFamily),
+    bodySmall = baseline.bodySmall.copy(fontFamily = bodyFontFamily),
+    labelLarge = baseline.labelLarge.copy(fontFamily = bodyFontFamily),
+    labelMedium = baseline.labelMedium.copy(fontFamily = bodyFontFamily),
+    labelSmall = baseline.labelSmall.copy(fontFamily = bodyFontFamily),
 )
