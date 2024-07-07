@@ -84,7 +84,7 @@ private fun noteInlineContent(
     ) {
         DisableSelection {
             Surface(
-                tonalElevation = 2.dp,
+                color = MaterialTheme.colorScheme.surfaceContainer,
                 shape = MaterialTheme.shapes.extraSmall,
                 onClick = { onNavigateToNote(it.toInt()) }
             ) {

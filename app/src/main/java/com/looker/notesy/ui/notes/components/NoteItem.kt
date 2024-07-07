@@ -37,7 +37,6 @@ import com.looker.notesy.ui.components.NoteId
 import com.looker.notesy.ui.theme.NotesyTheme
 import com.looker.notesy.ui.utils.LocalSpacing
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteItem(
     note: Note,
@@ -93,7 +92,7 @@ fun NoteItem(
                         FormattedNoteContent(
                             rawText = note.title.trim(),
                             enableSelection = false,
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.titleLarge,
                             maxLines = 1
                         )
                     }

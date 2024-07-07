@@ -10,8 +10,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
@@ -26,9 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.looker.notesy.ui.components.NotesyTopAppBar
@@ -81,9 +77,7 @@ fun Notesy() {
                 exit = fadeOut() + shrinkVertically()
             ) {
                 NavigationBar(
-                    modifier = Modifier
-                        .navigationBarsPadding()
-                        .height(54.dp)
+                    modifier = Modifier.navigationBarsPadding(),
                 ) {
                     appState.topLevelDestinations.forEach { destination ->
                         NavigationBarItem(
@@ -98,7 +92,7 @@ fun Notesy() {
             }
         },
         contentWindowInsets = if (appState.isTopLevelDestination) WindowInsets.systemBars
-        else WindowInsets(0)
+        else WindowInsets(0),
     ) {
         NotesyNavHost(
             modifier = Modifier

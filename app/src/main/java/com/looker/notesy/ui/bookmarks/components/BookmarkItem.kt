@@ -136,7 +136,7 @@ private fun LargeBookmarkItem(
             AsyncImage(
                 model = image,
                 contentDescription = null,
-                contentScale = ContentScale.FillWidth,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .padding(4.dp)
                     .fillMaxWidth()
@@ -148,7 +148,6 @@ private fun LargeBookmarkItem(
                 modifier = Modifier.padding(horizontal = LocalSpacing.current.border),
                 text = name,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
                 maxLines = 3
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -167,7 +166,7 @@ private fun LargeBookmarkItem(
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.outline
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(14.dp))
         }
     }
 }
@@ -207,8 +206,7 @@ private fun SmallBookmarkItem(
                 Text(
                     modifier = Modifier.padding(horizontal = LocalSpacing.current.border),
                     text = name,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.headlineSmall,
                     maxLines = 3
                 )
                 Spacer(modifier = Modifier.height(4.dp))

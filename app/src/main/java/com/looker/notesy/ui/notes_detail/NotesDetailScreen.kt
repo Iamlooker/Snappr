@@ -14,7 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -94,6 +93,7 @@ fun NotesDetailScreen(
             }
 
             Text(
+                modifier = Modifier.padding(horizontal = LocalSpacing.current.border),
                 text = date,
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.outline,

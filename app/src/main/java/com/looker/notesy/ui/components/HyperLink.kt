@@ -56,7 +56,7 @@ fun HyperLink(
                 onClick = onClick,
                 onLongClick = onLongClick
             ),
-        tonalElevation = 2.dp
+        color = MaterialTheme.colorScheme.surfaceContainer
     ) {
         Row(
             modifier = Modifier
